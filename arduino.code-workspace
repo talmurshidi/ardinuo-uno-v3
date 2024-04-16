@@ -10,6 +10,10 @@
 		{
 			"name": "Demo2-Flashing-LEDs",
 			"path": "Week1/Demo2-Flashing-LEDs"
+		},
+		{
+			"name": "Libraries",
+			"path": "Libraries"
 		}
 	],
 	"settings": {}
