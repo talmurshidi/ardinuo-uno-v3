@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "Demo 1 - Blinking LED",
+			"path": "Week1/Demo1-Blinking-LED"
+		},
+		{
+			"name": "Demo2-Flashing-LEDs",
+			"path": "Week1/Demo2-Flashing-LEDs"
+		}
+	],
+	"settings": {}
+}
