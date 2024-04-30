@@ -1,20 +1,60 @@
 {
 	"folders": [
 		{
-			"path": "."
-		},
-		{
-			"name": "Demo 1 - Blinking LED",
-			"path": "Week1/Demo1-Blinking-LED"
-		},
-		{
-			"name": "Demo2-Flashing-LEDs",
-			"path": "Week1/Demo2-Flashing-LEDs"
-		},
-		{
 			"name": "Libraries",
 			"path": "Libraries"
+		},
+		{
+			"name": "W1 Demo1-Blinking-LED",
+			"path": "Week1/W1-Demo1-Blinking-LED"
+		},
+		{
+			"name": "W1 Demo2-Flashing-LEDs",
+			"path": "Week1/W1-Demo2-Flashing-LEDs"
+		},
+		{
+			"name": "W1-Dimmed-LEDS",
+			"path": "Week1/W1-Dimmed-LEDS"
+		},
+		{
+			"name": "W2-Ex-WriteToSerial",
+			"path": "Week2/W2-Ex-WriteToSerial"
+		},
+		{
+			"name": "W2-Read-Input-From-Buttons",
+			"path": "Week2/W2-Read-Input-From-Buttons"
+		},
+		{
+			"path": "Week2/W2-Pointer-Referance-Practice"
+		},
+		{
+			"name": "W2-Interrupts-Buttons",
+			"path": "Week2/W2-Interrupts-Buttons"
+		},
+		{
+			"name": "W2-Project-Morse-Trainer",
+			"path": "Week2/W2-Project-Morse-Trainer"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.autoSave": "afterDelay",
+		"cmake.configureOnOpen": false,
+		"files.autoSaveDelay": 500,
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "ms-vscode.cpptools",
+		"editor.formatOnPaste": true,
+		"cSpell.words": [
+			"DDRB",
+			"DDRC",
+			"LEDS",
+			"PINC",
+			"PORTB",
+			"PORTC",
+			"RXEN",
+			"setbaud",
+			"UBRR",
+			"UBRRH",
+			"USART"
+		]
+	}
 }
