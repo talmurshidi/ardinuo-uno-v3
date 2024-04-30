@@ -47,6 +47,9 @@
 			"DDRB",
 			"DDRC",
 			"LEDS",
+			"PCICR",
+			"PCINT",
+			"PCMSK",
 			"PINC",
 			"PORTB",
 			"PORTC",
@@ -54,7 +57,8 @@
 			"setbaud",
 			"UBRR",
 			"UBRRH",
-			"USART"
+			"USART",
+			"vect"
 		]
 	}
 }

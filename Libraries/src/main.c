@@ -44,6 +44,7 @@
 //     return 0;
 // }
 
+
 // #include "usart.h"
 // #include "button.h"
 // #include "led.h"
@@ -64,33 +65,84 @@
 //     return 0;
 // }
 
+// #include <avr/io.h>
+// #include <util/delay.h>
+// #include "usart.h"
+// #include "button.h"
+
+// int main(void)
+// {
+//     initUSART();     // Initialize serial communication
+//     enableButton(1); // Enable the leftmost button (button 1)
+
+//     while (1)
+//     {
+//         if (debounceButtonPress(1, 50))
+//         { // Debounce for 50 ms
+//             printString("Button 1 pushed and debounced!\n");
+//             printString("Button 1 released!\n");
+//         }
+//         _delay_ms(100); // Additional delay to reduce CPU load, optional
+//     }
+//     return 0;
+// }
+
+// #include "led.h"
+// #include <util/delay.h>
+
+// int main(void)
+// {
+//     // Initialize all LEDs
+//     enableAllLeds();
+
+//     // Test each LED
+//     for (int i = 0; i < 4; i++)
+//     {
+//         lightUpOneLed(i);
+//         _delay_ms(500);
+//         lightDownOneLed(i);
+//         _delay_ms(500);
+//     }
+
+//     // Test fading
+//     fadeInLed(0, 2000);  // Gradually light up the first LED over 2 seconds
+//     fadeOutLed(0, 2000); // Gradually dim the first LED over 2 seconds
+
+//     // Run a toggle test
+//     while (1)
+//     {
+//         lightToggleAllLeds();
+//         _delay_ms(1000);
+//     }
+
+//     return 0;
+// }
+
+#include "usart.h"
+#include "button.h"
 #include "led.h"
-#include <util/delay.h>
 
 int main(void)
 {
-    // Initialize all LEDs
+    initUSART();
+    initButtons(); // Initialize buttons with interrupts
     enableAllLeds();
 
-    // Test each LED
-    for (int i = 0; i < 4; i++)
-    {
-        lightUpOneLed(i);
-        _delay_ms(500);
-        lightDownOneLed(i);
-        _delay_ms(500);
-    }
-
-    // Test fading
-    fadeInLed(0, 2000);  // Gradually light up the first LED over 2 seconds
-    fadeOutLed(0, 2000); // Gradually dim the first LED over 2 seconds
-
-    // Run a toggle test
     while (1)
     {
-        lightToggleAllLeds();
-        _delay_ms(1000);
+        int pressed = waitForButtonPress();
+        if (pressed == 1)
+        {
+            printString("Button 1 was pressed.\n");
+        }
+        else if (pressed == 2)
+        {
+            printString("Button 2 was pressed.\n");
+        }
+        else if (pressed == 3)
+        {
+            printString("Button 3 was pressed.\n");
+        }
     }
-
     return 0;
 }
