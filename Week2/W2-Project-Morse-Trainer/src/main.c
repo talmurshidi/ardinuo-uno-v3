@@ -12,20 +12,23 @@
 #define INTER_ELEMENT_GAP 250 // Gap between elements (dot or dash)
 #define INTER_LETTER_GAP 1000 // Gap between letters, longer to differentiate
 
-#define NUM_LETTERS 26
+#define NUMBER_OF_ROUNDS 5 // Number of generated questions
+#define MINIMUM_SCORE 2    // Minimum score to celebrate
+#define NUM_LETTERS 35
 
 const char *morseCodes[NUM_LETTERS] = {
     ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---",
     "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-",
-    "..-", "...-", ".--", "-..-", "-.--", "--.."};
-const char characters[NUM_LETTERS] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--",
+    "....--", ".....", "-....", "--...", "---..", "---..", "----."};
+const char characters[NUM_LETTERS] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 
 void initSystem()
 {
   initUSART();
   initButtons();
   enableAllLeds();
-  sei(); // Enable global interrupts if needed later
+  sei(); // Enable global interrupts
 }
 
 void countdown()
@@ -68,12 +71,12 @@ void displayMorseCode(const char *code)
 
 void performQuiz()
 {
-  srand(time(NULL)); // Seed the random number generator
+  srand((unsigned int)time(NULL)); // Seed the random number generator
   int score = 0;
   char input[100];
   int options[3]; // To hold indices of the options
 
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < NUMBER_OF_ROUNDS; i++)
   {
     int correctIndex = rand() % NUM_LETTERS; // Random index for the correct answer
     options[0] = correctIndex;               // Set one option as the correct answer
@@ -131,16 +134,16 @@ void performQuiz()
     }
   }
 
-  sprintf(input, "Final score: %d/5\n", score);
+  sprintf(input, "Final score: %d/%d\n", score, NUMBER_OF_ROUNDS);
   printString(input);
 
-  if (score > 3)
+  if (score >= MINIMUM_SCORE)
   {
-        while (1)
-        {
-            lightToggleAllLeds();
-            _delay_ms(1000);
-        }
+    while (1)
+    {
+      lightToggleAllLeds();
+      _delay_ms(1000);
+    }
   }
 }
 
