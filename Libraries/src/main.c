@@ -44,7 +44,6 @@
 //     return 0;
 // }
 
-
 // #include "usart.h"
 // #include "button.h"
 // #include "led.h"
@@ -118,31 +117,93 @@
 //     return 0;
 // }
 
-#include "usart.h"
-#include "button.h"
+// #include "usart.h"
+// #include "button.h"
+// #include "led.h"
+
+// int main(void)
+// {
+//     initUSART();
+//     initButtons(); // Initialize buttons with interrupts
+//     enableAllLeds();
+
+//     while (1)
+//     {
+//         int pressed = waitForButtonPress();
+//         if (pressed == 1)
+//         {
+//             printString("Button 1 was pressed.\n");
+//         }
+//         else if (pressed == 2)
+//         {
+//             printString("Button 2 was pressed.\n");
+//         }
+//         else if (pressed == 3)
+//         {
+//             printString("Button 3 was pressed.\n");
+//         }
+//     }
+//     return 0;
+// }
+
+// #include "buzzer.h"
+// #include <avr/io.h>
+// #include <util/delay.h>
+
+// int main(void)
+// {
+//     initBuzzer();
+
+//     float notes[] = {C5, D5, E5, F5, G5, A5, B5, C6};
+//     uint32_t durations[] = {500, 500, 500, 500, 500, 500, 500, 500}; // Durations in milliseconds
+//     uint8_t length = sizeof(notes) / sizeof(notes[0]);
+
+//     // playMusic(notes, durations, length);
+
+//     return 0;
+// }
+
 #include "led.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+void setup()
+{
+
+  initLeds();
+
+  // Configure Timer 1 for CTC mode
+  TCCR1A = 0;          // Ensure normal port operation (OC1A/OC1B disconnected)
+  TCCR1B = _BV(WGM12); // Set WGM12 bit for CTC mode
+
+  // Set the compare match value for 1Hz toggling with prescaler 1024 at 16MHz clock
+  // Freq = 16000000 / (1024 * (1 + OCR1A)) => OCR1A = (16000000 / (1024 * 1)) - 1 = 15624
+  OCR1A = 15624;
+
+  // Enable Timer 1 compare match interrupt A
+  TIMSK1 = _BV(OCIE1A);
+
+  // Set prescaler to 1024 and start the timer
+  TCCR1B |= _BV(CS12) | _BV(CS10); // CS12 and CS10 are prescaler bits set to 1024
+
+  // Enable global interrupts
+  sei();
+}
+
+// Timer 1 output compare A match interrupt service routine
+ISR(TIMER1_COMPA_vect)
+{
+  lightToggleAllLeds();
+}
 
 int main(void)
 {
-    initUSART();
-    initButtons(); // Initialize buttons with interrupts
-    enableAllLeds();
+  setup();
 
-    while (1)
-    {
-        int pressed = waitForButtonPress();
-        if (pressed == 1)
-        {
-            printString("Button 1 was pressed.\n");
-        }
-        else if (pressed == 2)
-        {
-            printString("Button 2 was pressed.\n");
-        }
-        else if (pressed == 3)
-        {
-            printString("Button 3 was pressed.\n");
-        }
-    }
-    return 0;
+  // Main loop does nothing, all action happens in the ISR
+  while (1)
+  {
+  }
+
+  return 0; // Never reached
 }

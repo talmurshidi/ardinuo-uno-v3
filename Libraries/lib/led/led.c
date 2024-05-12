@@ -5,6 +5,13 @@
 #define LED_START_PIN PB2
 #define LED_MASK (0x0F << LED_START_PIN)
 
+// Initialize all LED related settings
+void initLeds()
+{
+    DDRB |= LED_MASK;   // Set all LED pins as output
+    PORTB &= ~LED_MASK; // Ensure all LEDs are initially turned off
+}
+
 // Single LED control
 void enableOneLed(int ledNumber)
 {

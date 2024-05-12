@@ -4,6 +4,8 @@
 #include <avr/io.h>
 #include <stdint.h>
 
+void initLeds();
+
 // Initialization and Single LED Control : 
 void enableOneLed(int ledNumber);
 void lightUpOneLed(int ledNumber);

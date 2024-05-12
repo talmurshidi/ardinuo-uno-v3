@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "All Directories",
+			"path": "."
+		},
+		{
 			"name": "Libraries",
 			"path": "Libraries"
 		},
@@ -34,6 +38,28 @@
 		{
 			"name": "W2-Project-Morse-Trainer",
 			"path": "Week2/W2-Project-Morse-Trainer"
+		},
+		{
+			"name": "W3-Example-Potentiometer-AVR",
+			"path": "Week3/W3-Example-Potentiometer-AVR"
+		},
+		{
+			"path": "Week3/W3-Example-Using-Display-Lib"
+		},
+		{
+			"path": "Week3/W3-Scrolling-Numbers"
+		},
+		{
+			"name": "W3-Project-Nim",
+			"path": "Week3/W3-Project-Nim"
+		},
+		{
+			"name": "W4-Stopwatch",
+			"path": "Week4/W4-Stopwatch"
+		},
+		{
+			"name": "W4-Project-Lunar-Lander",
+			"path": "Week4/W4-Project-Lunar-Lander"
 		}
 	],
 	"settings": {
@@ -44,21 +70,43 @@
 		"editor.defaultFormatter": "ms-vscode.cpptools",
 		"editor.formatOnPaste": true,
 		"cSpell.words": [
+			"ADCSRA",
+			"ADMUX",
+			"ADPS",
+			"ADSC",
+			"AVCC",
+			"bitorder",
+			"COMPA",
 			"DDRB",
 			"DDRC",
+			"DDRD",
 			"LEDS",
+			"LSBFIRST",
+			"millisecs",
+			"MSBFIRST",
+			"OCIE",
 			"PCICR",
 			"PCINT",
 			"PCMSK",
 			"PINC",
 			"PORTB",
 			"PORTC",
+			"PORTD",
+			"PRESCALE",
+			"prescaler",
+			"prescaling",
 			"RXEN",
 			"setbaud",
+			"TCCR",
+			"TIMSK",
 			"UBRR",
 			"UBRRH",
 			"USART",
 			"vect"
-		]
+		],
+		"files.associations": {
+			"delay.h": "c",
+			"stdio.h": "c"
+		}
 	}
 }

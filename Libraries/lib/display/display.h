@@ -18,3 +18,5 @@ void initDisplay();
 void writeNumberToSegment(uint8_t segment, uint8_t value);
 void writeNumber(int number);
 void writeNumberAndWait(int number, int delay);
+void writeTimeAndWait(uint8_t minutes, uint8_t seconds, int delay);
+void blankSegment(uint8_t segment);

@@ -1,16 +1,16 @@
 #include "button.h"
 #include <util/delay.h>
-#include <avr/interrupt.h>
 
 volatile uint8_t buttonPressed = 0;
 
+// Interrupt Service Routine for pin change interrupt for buttons
 ISR(PCINT1_vect)
 {
   static uint8_t lastState = 0xFF;
   _delay_ms(50); // Debouncing delay
   uint8_t currentState = PINC;
 
-  // Compare current button state with the last stable state
+  // Check changes against last state and detect transition from high to low (button press)
   if (((currentState & (1 << BUTTON1_PIN)) != (lastState & (1 << BUTTON1_PIN))) &&
       !(currentState & (1 << BUTTON1_PIN)))
   {
@@ -41,20 +41,6 @@ void initButtons(void)
   enableButtonInterrupts();
 }
 
-void enableButtonInterrupts(void)
-{
-  // Configure each button pin as input with pull-up enabled
-  DDRC &= ~((1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN));
-  PORTC |= (1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN);
-
-  // Enable pin change interrupts for button pins
-  PCICR |= (1 << PCIE1);
-  PCMSK1 |= (1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN);
-
-  sei(); // Enable global interrupts
-}
-
-// Helper function to configure the button pin
 static void configureButtonPin(int pin)
 {
   DDRC &= ~(1 << pin); // Set button pin as input
@@ -75,9 +61,23 @@ void enableButton(int button)
     configureButtonPin(BUTTON3_PIN);
     break;
   default:
-    // Handle invalid button number
+    // Optional: Handle invalid button number
     break;
   }
+}
+
+int waitForButtonPress(void)
+{
+  buttonPressed = 0; // Reset the button pressed flag
+
+  while (buttonPressed == 0)
+  {
+   
+  }
+
+  int pressedButton = buttonPressed;
+  buttonPressed = 0; // Reset the flag after capturing the pressed button
+  return pressedButton;
 }
 
 int buttonPushed(int button)
@@ -106,7 +106,7 @@ int buttonReleased(int button)
   case 3:
     return (PINC & (1 << BUTTON3_PIN));
   default:
-    return 1; // Consider invalid button number as released
+    return 1; // invalid button number as released
   }
 }
 
@@ -118,36 +118,18 @@ int debounceButtonPress(int button, unsigned int ms)
     if (buttonPushed(button))
     {
       while (buttonPushed(button))
-        ;       // Optional: wait until button is released
+        ;       
       return 1; // Button was consistently pressed
     }
   }
   return 0; // Button was not consistently pressed
 }
 
-int waitForButtonPress(void)
+void enableButtonInterrupts(void)
 {
-  buttonPressed = 0; // Reset the button pressed flag
+  // Enable pin change interrupt for PCIE1 (where BUTTON1, BUTTON2, and BUTTON3 are mapped)
+  PCICR |= (1 << PCIE1);
+  PCMSK1 |= (1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN);
 
-  // Wait for a button press interrupt
-  while (buttonPressed == 0){ 
-    // Maybe sleep mode to save power
-  }
-
-  int pressedButton = buttonPressed; // Get the button that was pressed
-  buttonPressed = 0;                 // Reset the flag
-  return pressedButton;
+  sei(); // Enable global interrupts
 }
-
-// int waitForButtonPress(void)
-// {
-//   while (1)
-//   {
-//     if (buttonPushed(1))
-//       return 1;
-//     if (buttonPushed(2))
-//       return 2;
-//     if (buttonPushed(3))
-//       return 3;
-//   }
-// }
