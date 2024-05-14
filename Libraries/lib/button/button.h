@@ -18,12 +18,6 @@
 void initButtons(void);
 
 /**
- * Enables the specified button for interrupt handling.
- * @param button The button number to enable (1, 2, or 3).
- */
-void enableButton(int button);
-
-/**
  * Waits for a button press event and returns the button number.
  * This function will block until a button is pressed as determined
  * by the interrupt service routine.
@@ -46,19 +40,7 @@ int buttonPushed(int button);
 int buttonReleased(int button);
 
 /**
- * Performs a debounced button press check.
- * This function ensures the button is consistently pressed for a specified
- * duration to filter out noise or bouncing effects.
- * @param button The button number to check (1, 2, or 3).
- * @param ms The duration in milliseconds to check for a stable state.
- * @return Non-zero if the button was consistently pressed; zero otherwise.
- */
-int debounceButtonPress(int button, unsigned int ms);
-
-/**
- * Configures the interrupts for button press detection.
- * This function is typically called from within initButtons to set up
- * the necessary hardware interrupts for button handling.
+ * Enables the pin change interrupts for the buttons.
  */
 void enableButtonInterrupts(void);
 
