@@ -6,6 +6,7 @@
 #include "button.h"
 #include "usart.h"
 #include "led.h"
+#include "random.h"
 
 #define START_NUMBER_MIN 21 // min number of matches
 #define START_NUMBER_MAX 99 // max number of matches
@@ -18,18 +19,10 @@ void initHardware()
   initDisplay();
   initButtons();
   initLeds();
-  ADMUX = (1 << REFS0);                               // Use AVCC as the reference
-  ADCSRA = (1 << ADEN) | (1 << ADPS1) | (1 << ADPS0); // Enable the ADC and set the prescaler to 8
+  initRandom();
+  seedRandom();
   printf("System Initialized.\n");
   printf("Press S1 to decrement the Matches - Press S2 to confirm - Press S3 to increment the Matches\n");
-}
-
-int readPotentiometer()
-{
-  ADCSRA |= (1 << ADSC); // Start conversion
-  while (ADCSRA & (1 << ADSC))
-    ; // Wait for conversion to finish
-  return ADC;
 }
 
 void updateMoveDisplay(int move)
@@ -80,8 +73,8 @@ int downButtonPressed()
 
 void startGame(int *startNumber, int *maxNumber)
 {
-  *startNumber = START_NUMBER_MIN + (readPotentiometer() % (START_NUMBER_MAX - START_NUMBER_MIN + 1));
-  *maxNumber = MAX_NUMBER_MIN + (readPotentiometer() % (MAX_NUMBER_MAX - MAX_NUMBER_MIN + 1));
+  *startNumber = START_NUMBER_MIN + (getRandomNumber() % (START_NUMBER_MAX - START_NUMBER_MIN + 1));
+  *maxNumber = MAX_NUMBER_MIN + (getRandomNumber() % (MAX_NUMBER_MAX - MAX_NUMBER_MIN + 1));
   printf("Game starts with parameters:\n");
   printf("Total Number of Matches: %d, Max Number of Matches: %d\n", *startNumber, *maxNumber);
   writeNumberAndWait(*startNumber, 2000); // Display initial number of matches
@@ -89,9 +82,10 @@ void startGame(int *startNumber, int *maxNumber)
 
 int computerMove(int matches, int maxNumber)
 {
+  int randomNumber = getRandomNumber();
   int move = (matches - 1) % (maxNumber + 1);
   if (move == 0)
-    move = (rand() % maxNumber) + 1;
+    move = (randomNumber % maxNumber) + 1;
   printf("Computer decides to take %d matches.\n", move);
   return move;
 }
@@ -133,7 +127,8 @@ void displayTurn(char player, int matches)
 void playGame(int startNumber, int maxNumber)
 {
   int matches = startNumber;
-  char turn = (rand() % 2) ? '1' : '2'; // Randomly decide who starts
+  int randomNumber = getRandomNumber();
+  char turn = (randomNumber % 2) ? '1' : '2'; // Randomly decide who starts
 
   while (matches > 1)
   {
@@ -149,7 +144,6 @@ void playGame(int startNumber, int maxNumber)
 int main(void)
 {
   initHardware();             // Initialize display, buttons, and ADC
-  srand(readPotentiometer()); // Use potentiometer to seed the random number generator
 
   int startNumber, maxNumber;
   startGame(&startNumber, &maxNumber); // Setup the game based on potentiometer
