@@ -7,10 +7,10 @@
 #include "usart.h"
 #include "led.h"
 
-#define START_NUMBER_MIN 21
-#define START_NUMBER_MAX 99
-#define MAX_NUMBER_MIN 3
-#define MAX_NUMBER_MAX 9
+#define START_NUMBER_MIN 21 // min number of matches
+#define START_NUMBER_MAX 99 // max number of matches
+#define MAX_NUMBER_MIN 3 // min selected matches
+#define MAX_NUMBER_MAX 9 // max selected matches
 
 void initHardware()
 {
@@ -21,6 +21,7 @@ void initHardware()
   ADMUX = (1 << REFS0);                               // Use AVCC as the reference
   ADCSRA = (1 << ADEN) | (1 << ADPS1) | (1 << ADPS0); // Enable the ADC and set the prescaler to 8
   printf("System Initialized.\n");
+  printf("Press S1 to decrement the Matches - Press S2 to confirm - Press S3 to increment the Matches\n");
 }
 
 int readPotentiometer()
@@ -50,7 +51,7 @@ void displayWinner(char turn)
   clearDisplay();
   char winner = (turn == '1' ? 'C' : 'P');
   printf("%c wins the game.\n", winner);
-  writeNumberToSegment(1, winner == 'C' ? 2 : 1); // The loser takes the last match
+  writeNumberAndWait(winner == 'C' ? 2222 : 1111, 600); // The loser takes the last match
   _delay_ms(1000);
   for (int n = 0; n < 10; n++)
   {
@@ -82,8 +83,8 @@ void startGame(int *startNumber, int *maxNumber)
   *startNumber = START_NUMBER_MIN + (readPotentiometer() % (START_NUMBER_MAX - START_NUMBER_MIN + 1));
   *maxNumber = MAX_NUMBER_MIN + (readPotentiometer() % (MAX_NUMBER_MAX - MAX_NUMBER_MIN + 1));
   printf("Game starts with parameters:\n");
-  printf("Start Number: %d, Max Number: %d\n", *startNumber, *maxNumber);
-  writeNumberAndWait(*startNumber, 1000); // Display initial number of matches
+  printf("Total Number of Matches: %d, Max Number of Matches: %d\n", *startNumber, *maxNumber);
+  writeNumberAndWait(*startNumber, 2000); // Display initial number of matches
 }
 
 int computerMove(int matches, int maxNumber)
@@ -125,7 +126,6 @@ void displayTurn(char player, int matches)
   clearDisplay();
   writeNumberToSegment(2, player == '1' ? '1' : '2'); // 1 player, 2 computer
   _delay_ms(1000);
-  printf("Number of matches %d\n", matches);
   writeNumber(matches);
   _delay_ms(1000);
 }

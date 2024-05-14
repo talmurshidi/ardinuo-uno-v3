@@ -7,7 +7,7 @@ volatile uint8_t buttonPressed = 0;
 ISR(PCINT1_vect)
 {
   static uint8_t lastState = 0xFF;
-  _delay_ms(50); // Debouncing delay
+  // _delay_ms(10); // Debouncing delay
   uint8_t currentState = PINC;
 
   // Check changes against last state and detect transition from high to low (button press)
