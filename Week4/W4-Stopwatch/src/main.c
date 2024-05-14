@@ -4,21 +4,13 @@
 #include "display.h"
 #include "button.h"
 #include "usart.h"
+#include "timer.h"
 
 // Global variables
 volatile uint16_t milliseconds = 0;
 volatile uint8_t seconds = 0;
 volatile uint8_t minutes = 0;
 volatile uint8_t is_running = 0;
-
-void initTimer()
-{
-  // Configure Timer 2 for CTC mode
-  TCCR2A = _BV(WGM21);  // Set CTC mode
-  OCR2A = 249;          // 4ms @ 16MHz with prescaler of 64
-  TCCR2B = _BV(CS22);   // Set prescaler to 64
-  TIMSK2 = _BV(OCIE2A); // Enable Timer2 Compare Match A Interrupt
-}
 
 void init()
 {
@@ -30,31 +22,12 @@ void init()
   sei(); // Enable global interrupts
 }
 
-void startTimer()
-{
-  TCCR2B |= _BV(CS22); // Start Timer2 with prescaler 64
-  is_running = 1;
-}
-
-void stopTimer()
-{
-  TCCR2B &= ~(_BV(CS20) | _BV(CS21) | _BV(CS22)); // Stop Timer2
-  is_running = 0;
-}
-
 // Wrapper function to continuously update the time on display
 void updateDisplayLoop(uint8_t minutes, uint8_t seconds)
 {
   int refreshRate = 10;                           // Update rate in milliseconds per digit
   int cyclesPerSecond = 1000 / (refreshRate * 4); // Calculate how many full cycles per second
   writeTimeAndWait(minutes, seconds, cyclesPerSecond);
-}
-
-void resetTimer()
-{
-  seconds = 0;
-  minutes = 0;
-  milliseconds = 0;
 }
 
 // Start the stopwatch
@@ -81,12 +54,14 @@ void stopStopwatch()
 void resetStopwatch()
 {
   stopStopwatch();
+  milliseconds = 0;
   seconds = 0;
   minutes = 0;
-  updateDisplayLoop(00, 00);
+  updateDisplayLoop(minutes, seconds);
   startStopwatch();
 }
 
+// Call tick from Interrupt
 void tick()
 {
   if (is_running)
@@ -141,7 +116,7 @@ int main()
     {
       updateDisplayLoop(minutes, seconds);
     }
-    }
+  }
 
   return 0;
 }
