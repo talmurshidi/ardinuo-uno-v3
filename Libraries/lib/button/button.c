@@ -13,6 +13,9 @@ volatile uint32_t millis_counter = 0;
 
 ISR(TIMER0_COMPA_vect)
 {
+  if (millis_counter > 1000)
+    millis_counter = 0;
+  
   millis_counter++;
 }
 
