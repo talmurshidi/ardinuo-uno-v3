@@ -1,99 +1,50 @@
 #include "button.h"
-#include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
 volatile uint8_t buttonPressed = 0;
 
 // Define debounce delay
-#define DEBOUNCE_DELAY_MS 20
+#define DEBOUNCE_DELAY_US 1000
 
-// Timer to handle debouncing
-volatile uint32_t millis_counter = 0;
-
-ISR(TIMER0_COMPA_vect)
+// Initialize a specific button by setting predefined pin as inputs and enabling interrupts
+void initButton(int button_pin)
 {
-  if (millis_counter > 1000)
-    millis_counter = 0;
-  
-  millis_counter++;
+  BUTTON_DDR &= ~(1 << button_pin);
+  BUTTON_PORT |= (1 << button_pin);
 }
 
-uint32_t millis(void)
+// Enable interrupts for button pins
+void enableButtonInterrupts(void)
 {
-  uint32_t ms;
-  cli(); // Disable interrupts temporarily
-  ms = millis_counter;
-  sei(); // Re-enable interrupts
-  return ms;
-}
-
-// Interrupt Service Routine for pin change interrupt for buttons
-ISR(PCINT1_vect)
-{
-  static uint8_t lastState = 0xFF;
-  static uint32_t lastDebounceTime = 0;
-
-  uint8_t currentState = PINC;
-  uint32_t currentTime = millis();
-
-  if ((currentTime - lastDebounceTime) > DEBOUNCE_DELAY_MS)
-  {
-    if ((currentState & (1 << BUTTON1_PIN)) == 0 && (lastState & (1 << BUTTON1_PIN)) != 0)
-    {
-      buttonPressed = 1;
-    }
-    else if ((currentState & (1 << BUTTON2_PIN)) == 0 && (lastState & (1 << BUTTON2_PIN)) != 0)
-    {
-      buttonPressed = 2;
-    }
-    else if ((currentState & (1 << BUTTON3_PIN)) == 0 && (lastState & (1 << BUTTON3_PIN)) != 0)
-    {
-      buttonPressed = 3;
-    }
-
-    lastDebounceTime = currentTime;
-  }
-  lastState = currentState;
-}
-
-void initTimer(void)
-{
-  // Configure Timer0
-  TCCR0A = (1 << WGM01);              // CTC mode
-  OCR0A = 249;                        // Compare value for 1ms at 16MHz with prescaler 64
-  TIMSK0 = (1 << OCIE0A);             // Enable compare interrupt
-  TCCR0B = (1 << CS01) | (1 << CS00); // Prescaler 64
+  // Enable pin change interrupt for PORTC
+  PCICR |= (1 << PCIE1);                                                  // Enable interrupt for PORTC
+  PCMSK1 |= (1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN); // Enable interrupt for BUTTON1_PIN, BUTTON2_PIN, BUTTON3_PIN
 
   sei(); // Enable global interrupts
 }
 
+// Initialize all buttons by setting predefined pins as inputs and enabling interrupts
 void initButtons(void)
 {
-  // Set button pins as input
-  DDRC &= ~((1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN));
+  // Set predefined button pins as input and enable pull-up resistors
+  initButton(BUTTON1_PIN);
 
-  // Enable pull-up resistors
-  PORTC |= (1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN);
+  initButton(BUTTON2_PIN);
 
-  // Enable pin change interrupt for PCIE1 (where BUTTON1, BUTTON2, and BUTTON3 are mapped)
-  PCICR |= (1 << PCIE1);
-  PCMSK1 |= (1 << BUTTON1_PIN) | (1 << BUTTON2_PIN) | (1 << BUTTON3_PIN);
+  initButton(BUTTON3_PIN);
 
-  initTimer();
-  sei(); // Enable global interrupts
+  enableButtonInterrupts();
 }
 
+// Wait for any button press and return the button number
 int waitForButtonPress(void)
 {
-  buttonPressed = 0; // Reset the button pressed flag
-
-  while (buttonPressed == 0)
+  while (!buttonPressed)
     ;
-
-  int pressedButton = buttonPressed;
-  buttonPressed = 0; // Reset the flag after capturing the pressed button
-  return pressedButton;
+  uint8_t pressed = buttonPressed;
+  buttonPressed = 0;
+  return pressed;
 }
 
 int buttonPushed(int button)
@@ -101,11 +52,11 @@ int buttonPushed(int button)
   switch (button)
   {
   case 1:
-    return !(PINC & (1 << BUTTON1_PIN));
+    return !(BUTTON_PIN & (1 << BUTTON1_PIN));
   case 2:
-    return !(PINC & (1 << BUTTON2_PIN));
+    return !(BUTTON_PIN & (1 << BUTTON2_PIN));
   case 3:
-    return !(PINC & (1 << BUTTON3_PIN));
+    return !(BUTTON_PIN & (1 << BUTTON3_PIN));
   default:
     return 0; // Invalid button number
   }
@@ -116,12 +67,52 @@ int buttonReleased(int button)
   switch (button)
   {
   case 1:
-    return (PINC & (1 << BUTTON1_PIN));
+    return (BUTTON_PIN & (1 << BUTTON1_PIN));
   case 2:
-    return (PINC & (1 << BUTTON2_PIN));
+    return (BUTTON_PIN & (1 << BUTTON2_PIN));
   case 3:
-    return (PINC & (1 << BUTTON3_PIN));
+    return (BUTTON_PIN & (1 << BUTTON3_PIN));
   default:
     return 1; // Invalid button number as released
+  }
+}
+
+// Interrupt Service Routine for Pin Change Interrupt 1 (PCINT1_vect)
+ISR(PCINT1_vect)
+{
+  // Button 1 is pressed (bit is set to 0)?
+  if (bit_is_clear(BUTTON_PIN, BUTTON1_PIN))
+  {
+    // Debounce
+    _delay_us(DEBOUNCE_DELAY_US);
+    // Button 1 is still pressed?
+    if (bit_is_clear(BUTTON_PIN, BUTTON1_PIN))
+    {
+      buttonPressed = BUTTON1_PIN;
+    }
+  }
+
+  // Button 2 is pressed (bit is set to 0)?
+  if (bit_is_clear(BUTTON_PIN, BUTTON2_PIN))
+  {
+    // Debounce
+    _delay_us(DEBOUNCE_DELAY_US);
+    // Button 2 is still pressed?
+    if (bit_is_clear(BUTTON_PIN, BUTTON2_PIN))
+    {
+      buttonPressed = BUTTON2_PIN;
+    }
+  }
+
+  // Button 3 is pressed (bit is set to 0)?
+  if (bit_is_clear(BUTTON_PIN, BUTTON3_PIN))
+  {
+    // Debounce
+    _delay_us(DEBOUNCE_DELAY_US);
+    // Button 3 is still pressed?
+    if (bit_is_clear(BUTTON_PIN, BUTTON3_PIN))
+    {
+      buttonPressed = BUTTON3_PIN;
+    }
   }
 }
