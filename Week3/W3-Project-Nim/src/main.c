@@ -10,8 +10,13 @@
 
 #define START_NUMBER_MIN 21 // min number of matches
 #define START_NUMBER_MAX 99 // max number of matches
-#define MAX_NUMBER_MIN 3 // min selected matches
-#define MAX_NUMBER_MAX 9 // max selected matches
+#define MAX_NUMBER_MIN 3    // min selected matches
+#define MAX_NUMBER_MAX 9    // max selected matches
+
+void displayButtonOptions()
+{
+  printf("Press S1 to decrement the Matches - Press S2 to confirm - Press S3 to increment the Matches\n");
+}
 
 void initHardware()
 {
@@ -22,7 +27,7 @@ void initHardware()
   initRandom();
   seedRandom();
   printf("System Initialized.\n");
-  printf("Press S1 to decrement the Matches - Press S2 to confirm - Press S3 to increment the Matches\n");
+  displayButtonOptions();
 }
 
 void updateMoveDisplay(int move)
@@ -94,6 +99,7 @@ int playerMove(int maxNumber)
 {
   int move = 1;
   updateMoveDisplay(move);
+  displayButtonOptions();
 
   while (!confirmButtonPressed())
   {
@@ -119,6 +125,7 @@ void displayTurn(char player, int matches)
 {
   clearDisplay();
   writeNumberToSegment(2, player == '1' ? '1' : '2'); // 1 player, 2 computer
+  printf("%c is the current player!\n", player == '1' ? 'P' : 'C');
   _delay_ms(1000);
   writeNumber(matches);
   _delay_ms(1000);
@@ -143,7 +150,7 @@ void playGame(int startNumber, int maxNumber)
 
 int main(void)
 {
-  initHardware();             // Initialize display, buttons, and ADC
+  initHardware(); // Initialize display, buttons, and ADC
 
   int startNumber, maxNumber;
   startGame(&startNumber, &maxNumber); // Setup the game based on potentiometer
