@@ -4,11 +4,11 @@
 
 void initTimer()
 {
-    // Configure Timer 2 for CTC mode
-    TCCR2A = _BV(WGM21);  // Set CTC mode
-    OCR2A = 249;          // 4ms @ 16MHz with prescaler of 64
-    TCCR2B = _BV(CS22);   // Set prescaler to 64
-    TIMSK2 = _BV(OCIE2A); // Enable Timer2 Compare Match A Interrupt
+    // Configure Timer 0 for CTC mode
+    TCCR0A |= _BV(WGM01);            // CTC Mode
+    OCR0A = 156;                     // Set up for 1ms @ 16MHz, Prescaler 1024
+    TCCR0B |= _BV(CS02) | _BV(CS00); // Prescaler 1024
+    TIMSK0 |= _BV(OCIE0A);           // Enable Timer0 Compare Match A Interrupt
 }
 
 void startTimer()
