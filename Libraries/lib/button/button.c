@@ -2,10 +2,10 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-volatile uint8_t buttonPressed = 0;
-
 // Define debounce delay
 #define DEBOUNCE_DELAY_US 1000
+
+volatile uint8_t buttonPressed;
 
 // Initialize a specific button by setting predefined pin as inputs and enabling interrupts
 void initButton(int button_pin)
@@ -29,11 +29,8 @@ void initButtons(void)
 {
   // Set predefined button pins as input and enable pull-up resistors
   initButton(BUTTON1_PIN);
-
   initButton(BUTTON2_PIN);
-
   initButton(BUTTON3_PIN);
-
   enableButtonInterrupts();
 }
 
@@ -77,8 +74,8 @@ int buttonReleased(int button)
   }
 }
 
-// Interrupt Service Routine for Pin Change Interrupt 1 (PCINT1_vect)
-ISR(PCINT1_vect)
+// buttonCallback to be called by Interrupt Service Routine for Pin Change Interrupt 1 (PCINT1_vect)
+void buttonCallback(void)
 {
   // Button 1 is pressed (bit is set to 0)?
   if (bit_is_clear(BUTTON_PIN, BUTTON1_PIN))

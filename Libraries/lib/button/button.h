@@ -28,4 +28,7 @@ int buttonReleased(int button);
 // Enable interrupts for button pins
 void enableButtonInterrupts(void);
 
+// To be called by interrupts
+void buttonCallback(void);
+
 #endif // BUTTON_H
