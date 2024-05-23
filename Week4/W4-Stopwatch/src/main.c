@@ -5,9 +5,10 @@
 #include "button.h"
 #include "usart.h"
 #include "timer.h"
+#include "callback.h"
+#include "led.h"
 
 // Global variables
-volatile uint16_t milliseconds = 0;
 volatile uint8_t seconds = 0;
 volatile uint8_t minutes = 0;
 volatile uint8_t is_running = 0;
@@ -16,8 +17,9 @@ void init()
 {
   initUSART();
   initDisplay();
-  initTimer();
+  initTimer1();
   initButtons();
+  initLeds();
   // startTimer();
   sei(); // Enable global interrupts
 }
@@ -36,7 +38,7 @@ void startStopwatch()
   if (!is_running)
   {
     is_running = 1;
-    startTimer();
+    startTimer1();
   }
 }
 
@@ -46,7 +48,7 @@ void stopStopwatch()
   if (is_running)
   {
     is_running = 0;
-    stopTimer();
+    stopTimer1();
   }
 }
 
@@ -54,11 +56,21 @@ void stopStopwatch()
 void resetStopwatch()
 {
   stopStopwatch();
-  milliseconds = 0;
   seconds = 0;
   minutes = 0;
   updateDisplayLoop(minutes, seconds);
   startStopwatch();
+}
+
+void displayLedsOneByOne()
+{
+  for (int i = 0; i < NUMBER_OF_LEDS; i++)
+  {
+    lightUpOneLed(i);
+    _delay_ms(100);
+    lightDownOneLed(i);
+    _delay_ms(100);
+  }
 }
 
 // Call tick from Interrupt
@@ -75,26 +87,22 @@ void tick()
       {
         minutes = 0;
       }
+      displayLedsOneByOne();
     }
     printf("%d:%d\n", minutes, seconds);
   }
 }
 
-// Timer 2 Compare Match A Interrupt Service Routine
-ISR(TIMER2_COMPA_vect)
+// To be called from timer interrupt
+void timerCallback()
 {
-  static uint16_t count = 0;
-  count++;
-  if (count >= 1000)
-  { // 1000 ms passed
-    count = 0;
-    tick(); // Update time every second
-  }
+  tick(); // Update time every second
 }
 
 int main()
 {
   init();
+  setTimer1Callback(timerCallback);
 
   printf("Start the stopwatch by pressing button S1, stop by pressing button S2, and reset with S3\n");
 

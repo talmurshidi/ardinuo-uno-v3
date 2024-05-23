@@ -13,6 +13,8 @@
 #define BUTTON_DDR DDRC
 #define BUTTON_PIN PINC
 
+volatile uint8_t buttonPressed;
+
 // Initialize all buttons by setting predefined pins as inputs and enabling interrupts
 void initButtons(void);
 

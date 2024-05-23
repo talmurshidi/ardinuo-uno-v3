@@ -5,8 +5,6 @@
 // Define debounce delay
 #define DEBOUNCE_DELAY_US 1000
 
-volatile uint8_t buttonPressed;
-
 // Initialize a specific button by setting predefined pin as inputs and enabling interrupts
 void initButton(int button_pin)
 {
