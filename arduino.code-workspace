@@ -75,7 +75,8 @@
 				"MD033":{
 					"allowed_elements": [
 						"details",
-						"summary"
+						"summary",
+						"br"
 					]	
 				},
 				"MD024": {
@@ -122,6 +123,7 @@
 			"TCCR",
 			"TCNT",
 			"TIMSK",
+			"TOIE",
 			"TXEN",
 			"UBRR",
 			"UBRRH",

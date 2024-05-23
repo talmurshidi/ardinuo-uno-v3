@@ -9,6 +9,7 @@
   - [Arduino UNO Timer Library](#arduino-uno-timer-library)
   - [Arduino UNO Button Library](#arduino-uno-button-library)
   - [Arduino UNO Callback Library](#arduino-uno-callback-library)
+  - [Arduino UNO Buzzer Library](#arduino-uno-buzzer-library)
 - [Week 1](#week-1)
 - [Week 2](#week-2)
 - [Week 3](#week-3)
@@ -91,7 +92,22 @@ int main(void)
 
     // Initialize LEDs
     initLeds();
-    printf("LEDs Initialized\n");
+<!-- TOC -->
+
+- [ARDUINO UNO R3](#arduino-uno-r3)
+- [Libraries](#libraries)
+  - [Arduino Multi-function Shield LED Library](#arduino-multi-function-shield-led-library)
+  - [Arduino UNO Timer Library](#arduino-uno-timer-library)
+  - [Arduino UNO Button Library](#arduino-uno-button-library)
+  - [Arduino UNO Callback Library](#arduino-uno-callback-library)
+  - [Arduino UNO Buzzer Library](#arduino-uno-buzzer-library)
+- [Week 1](#week-1)
+- [Week 2](#week-2)
+- [Week 3](#week-3)
+- [Week 4](#week-4)
+- [Week 5](#week-5)
+
+<!-- /TOC -->    printf("LEDs Initialized\n");
 
     // Enable and test individual LEDs
     for (int i = 0; i < NUMBER_OF_LEDS; i++)
@@ -164,6 +180,9 @@ int main(void)
     return 0;
 }
 ```
+
+[Back to top](#integration-2)
+<br>
 
 ### Arduino UNO Timer Library
 
@@ -239,13 +258,12 @@ int main(void) {
     initTimer2();
     startTimer2();
 
-    while (1) {
-        // Main loop
-    }
-
     return 0;
 }
 ```
+
+[Back to top](#integration-2)
+<br>
 
 ### Arduino UNO Button Library
 
@@ -426,6 +444,9 @@ int main(void)
 }
 ```
 
+[Back to top](#integration-2)
+<br>
+
 ### Arduino UNO Buzzer Library
 
 #### Summary
@@ -483,6 +504,9 @@ int main(void)
     return 0;
 }
 ```
+
+[Back to top](#integration-2)
+<br>
 
 </details>
 
