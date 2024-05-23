@@ -1,88 +1,133 @@
-#include <avr/io.h>
-#define __DELAY_BACKWARD_COMPATIBLE__
+#include "led.h"
 #include <util/delay.h>
-#define NUMBER_OF_LEDS 4
-#define LED_START_PIN PB2
-#define LED_MASK (0x0F << LED_START_PIN)
 
-// Initialize all LED related settings
-void initLeds()
+// Simple delay function
+void delay_ms(uint16_t ms)
 {
-    DDRB |= LED_MASK;   // Set all LED pins as output
-    PORTB &= ~LED_MASK; // Ensure all LEDs are initially turned off
+    for (uint16_t i = 0; i < ms; i++)
+    {
+        _delay_ms(1);
+    }
 }
 
-// Single LED control
+void delay_us(uint16_t ms)
+{
+    for (uint16_t i = 0; i < ms; i++)
+    {
+        _delay_us(1);
+    }
+}
+
+// Calculate the actual LED pin number
+int calcLedNumber(int ledNumber)
+{
+    return (5 - ledNumber);
+}
+
+// Initialize all LED pins as output and turn them off initially
+void initLeds(void)
+{
+    enableAllLeds();
+    lightDownAllLeds();
+}
+
+// Enable a single LED (set its pin as output)
 void enableOneLed(int ledNumber)
 {
     if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
-        return;
-    DDRB |= (1 << (LED_START_PIN + ledNumber));
+        return;                                   // Check if LED number is valid
+    LED_DDR |= (1 << (calcLedNumber(ledNumber))); // Enable the LED pin
 }
 
+// Light up a single LED
 void lightUpOneLed(int ledNumber)
 {
     if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
-        return;
-    PORTB &= ~(1 << (LED_START_PIN + ledNumber));
+        return;                                     // Check if LED number is valid
+    LED_PORT &= ~(1 << (calcLedNumber(ledNumber))); // Turn on the LED (active low)
 }
 
+// Light down a single LED
 void lightDownOneLed(int ledNumber)
 {
     if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
-        return;
-    PORTB |= (1 << (LED_START_PIN + ledNumber));
+        return;                                    // Check if LED number is valid
+    LED_PORT |= (1 << (calcLedNumber(ledNumber))); // Turn off the LED (active low)
 }
 
+// Toggle a single LED
 void lightToggleOneLed(int ledNumber)
 {
     if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
-        return;
-    PORTB ^= (1 << (LED_START_PIN + ledNumber));
+        return;                                    // Check if LED number is valid
+    LED_PORT ^= (1 << (calcLedNumber(ledNumber))); // Toggle the LED
 }
 
-// Multiple LEDs control
+// Enable multiple LEDs (set their pins as output)
 void enableMultipleLeds(uint8_t leds)
 {
-    DDRB |= (leds << LED_START_PIN);
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        if (leds & (1 << i))
+        {
+            LED_DDR |= (1 << (calcLedNumber(i)));
+        }
+    }
 }
 
+// Light up multiple LEDs (active low)
 void lightUpMultipleLeds(uint8_t leds)
 {
-    PORTB &= ~(leds << LED_START_PIN);
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        if (leds & (1 << i))
+        {
+            LED_PORT &= ~(1 << (calcLedNumber(i)));
+        }
+    }
 }
 
+// Light down multiple LEDs (active low)
 void lightDownMultipleLeds(uint8_t leds)
 {
-    PORTB |= (leds << LED_START_PIN);
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        if (leds & (1 << i))
+        {
+            LED_PORT |= (1 << (calcLedNumber(i)));
+        }
+    }
 }
 
-// All LEDs control
-void enableAllLeds()
+// Enable all LEDs
+void enableAllLeds(void)
 {
-    DDRB |= LED_MASK; // Set all LED pins as output
+    LED_DDR |= (1 << LED0_PIN) | (1 << LED1_PIN) | (1 << LED2_PIN) | (1 << LED3_PIN);
 }
 
-void lightUpAllLeds()
+// Light up all LEDs (active low)
+void lightUpAllLeds(void)
 {
-    PORTB &= ~LED_MASK; // Turn on all LEDs
+    LED_PORT &= ~((1 << LED0_PIN) | (1 << LED1_PIN) | (1 << LED2_PIN) | (1 << LED3_PIN));
 }
 
-void lightDownAllLeds()
+// Light down all LEDs (active low)
+void lightDownAllLeds(void)
 {
-    PORTB |= LED_MASK; // Turn off all LEDs
+    LED_PORT |= (1 << LED0_PIN) | (1 << LED1_PIN) | (1 << LED2_PIN) | (1 << LED3_PIN);
 }
 
-void lightToggleAllLeds()
+// Toggle all LEDs
+void lightToggleAllLeds(void)
 {
-    PORTB ^= LED_MASK; // Toggle all LEDs
+    LED_PORT ^= (1 << LED0_PIN) | (1 << LED1_PIN) | (1 << LED2_PIN) | (1 << LED3_PIN);
 }
 
-// LED Dimming
+// Dim a single LED by percentage over a duration
 void dimLed(int ledNumber, int percentage, int duration)
 {
     if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
-        return;
+        return;                      // Check if LED number is valid
     int delayOn = (percentage * 10); // Calculate on time as a factor of percentage
     int delayOff = (1000 - delayOn); // Calculate off time
 
@@ -91,14 +136,17 @@ void dimLed(int ledNumber, int percentage, int duration)
     for (long i = 0; i < numCycles; i++)
     {
         lightUpOneLed(ledNumber);   // Turn LED on
-        _delay_us(delayOn);         // Delay for 'on' period
+        delay_us(delayOn);          // Delay for 'on' period
         lightDownOneLed(ledNumber); // Turn LED off
-        _delay_us(delayOff);        // Delay for 'off' period
+        delay_us(delayOff);         // Delay for 'off' period
     }
 }
 
+// Fade in a single LED over a duration
 void fadeInLed(int ledNumber, int duration)
 {
+    if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
+        return;                                      // Check if LED number is valid
     int increment = 5;                               // Brightness increment
     int stepDuration = duration / (100 / increment); // Time per brightness level
 
@@ -108,8 +156,11 @@ void fadeInLed(int ledNumber, int duration)
     }
 }
 
+// Fade out a single LED over a duration
 void fadeOutLed(int ledNumber, int duration)
 {
+    if (ledNumber < 0 || ledNumber >= NUMBER_OF_LEDS)
+        return;                                      // Check if LED number is valid
     int decrement = 5;                               // Brightness decrement
     int stepDuration = duration / (100 / decrement); // Time per brightness level
 

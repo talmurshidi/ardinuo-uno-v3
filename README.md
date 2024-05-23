@@ -10,20 +10,161 @@
 
 </summary>
 
-## Arduino UNO Timer Library
+### Arduino Multi-function Shield LED Library
 
-### Summary
+#### Summary
+
+This project provides a comprehensive library for controlling LEDs on the Arduino Multi-function Shield Expansion Board. The library is implemented using the AVR GCC toolchain and is designed to work with PlatformIO. It offers functionality for controlling individual LEDs, multiple LEDs, and all LEDs simultaneously, including dimming and fading effects.
+
+#### Benefits
+
+- **Ease of Use**: Simplifies LED control with easy-to-use functions.
+- **Flexibility**: Supports control of individual LEDs, multiple LEDs, and all LEDs.
+- **Advanced Features**: Includes dimming and fading functionalities.
+- **Educational**: Helps in understanding low-level AVR microcontroller programming.
+
+#### Functionality
+
+The library includes the following features:
+
+#### Initialization and Single LED Control
+
+- **initLeds()**: Initializes all LED pins as output and turns them off initially.
+- **enableOneLed(int ledNumber)**: Enables a single LED by setting its pin as output.
+- **lightUpOneLed(int ledNumber)**: Lights up a single LED.
+- **lightDownOneLed(int ledNumber)**: Turns off a single LED.
+- **lightToggleOneLed(int ledNumber)**: Toggles the state of a single LED.
+
+#### Multiple LEDs Control
+
+- **enableMultipleLeds(uint8_t leds)**: Enables multiple LEDs by setting their pins as output.
+- **lightUpMultipleLeds(uint8_t leds)**: Lights up multiple LEDs.
+- **lightDownMultipleLeds(uint8_t leds)**: Turns off multiple LEDs.
+
+#### All LEDs Control
+
+- **enableAllLeds()**: Enables all LEDs by setting their pins as output.
+- **lightUpAllLeds()**: Lights up all LEDs.
+- **lightDownAllLeds()**: Turns off all LEDs.
+- **lightToggleAllLeds()**: Toggles the state of all LEDs.
+
+#### LED Dimming and Fading
+
+- **dimLed(int ledNumber, int percentage, int duration)**: Dims a single LED by a given percentage over a specified duration.
+- **fadeInLed(int ledNumber, int duration)**: Fades in a single LED over a specified duration.
+- **fadeOutLed(int ledNumber, int duration)**: Fades out a single LED over a specified duration.
+
+#### How to Use
+
+##### Example Code
+
+Here's a simple example to test the functionality of the LED library:
+
+```c
+#include "led.h"
+#include "usart.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include <stdio.h>
+
+// Main function
+int main(void)
+{
+    // Initialize USART for debugging
+    initUSART();
+    printf("USART Initialized\n");
+
+    // Initialize LEDs
+    initLeds();
+    printf("LEDs Initialized\n");
+
+    // Enable and test individual LEDs
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        enableOneLed(i);
+        printf("LED %d enabled\n", i);
+    }
+
+    // Light up and down individual LEDs with a delay
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        lightUpOneLed(i);
+        printf("LED %d lit up\n", i);
+        _delay_ms(1000);
+
+        lightDownOneLed(i);
+        printf("LED %d turned off\n", i);
+        _delay_ms(1000);
+    }
+
+    // Toggle individual LEDs
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        lightToggleOneLed(i);
+        printf("LED %d toggled\n", i);
+        _delay_ms(1000);
+    }
+
+    // Test multiple LEDs control
+    enableMultipleLeds(0b00001111); // Enable first 4 LEDs
+    printf("Multiple LEDs enabled\n");
+
+    lightUpMultipleLeds(0b00001111); // Light up first 4 LEDs
+    printf("Multiple LEDs lit up\n");
+    _delay_ms(1000);
+
+    lightDownMultipleLeds(0b00001111); // Turn off first 4 LEDs
+    printf("Multiple LEDs turned off\n");
+    _delay_ms(1000);
+
+    // Test all LEDs control
+    enableAllLeds();
+    printf("All LEDs enabled\n");
+
+    lightToggleAllLeds();
+    printf("All LEDs toggled\n");
+    _delay_ms(1000);
+
+    // Test dimming, fading in, and fading out of LEDs one by one
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+        dimLed(i, 50, 1000); // Dim LED 0 to 50% over 1 second
+        printf("LED %d dimmed to 50%%\n", i);
+
+        fadeInLed(i, 2000); // Fade in LED 0 over 2 seconds
+        printf("LED %d faded in\n", i);
+
+        fadeOutLed(i, 2000); // Fade out LED 0 over 2 seconds
+        printf("LED %d faded out\n", i);
+    }
+
+    lightUpAllLeds();
+    printf("All LEDs lit up\n");
+    _delay_ms(1000);
+
+    lightDownAllLeds();
+    printf("All LEDs turned off\n");
+    _delay_ms(1000);
+
+    return 0;
+}
+```
+
+### Arduino UNO Timer Library
+
+#### Summary
 
 This project provides a basic timer library for the Arduino UNO V3 with ATmega328P, implemented using PlatformIO and the C programming language. The library allows for precise timing operations without relying on the Arduino framework, offering greater control over the hardware.
 
-### Benefits
+#### Benefits
 
 - **Precision**: Directly manipulate ATmega328P timers for accurate timing.
 - **Flexibility**: Configure Timer0, Timer1, and Timer2 for various frequencies.
 - **Efficiency**: Optimize performance by bypassing the Arduino framework.
 - **Educational**: Learn low-level programming and register manipulation on AVR microcontrollers.
 
-### Functionality
+#### Functionality
 
 The timer library provides functions to initialize, start, and stop three different timers:
 
@@ -33,7 +174,7 @@ The timer library provides functions to initialize, start, and stop three differ
 
 Additionally, the project includes USART communication to print timer-related messages for debugging and demonstration purposes.
 
-### Short Explanation
+#### Short Explanation
 
 The project consists of:
 
@@ -41,7 +182,9 @@ The project consists of:
 - **timer.c**: Implementation file configuring the timers using AVR registers.
 - **main.c**: Example usage of the timer library with interrupt service routines (ISRs) for each timer. The ISRs print messages at specified intervals using the USART.
 
-### Example Code
+#### How to use
+
+##### Example Code
 
 Here's a snippet from the `main.c` file demonstrating the timer library usage:
 
