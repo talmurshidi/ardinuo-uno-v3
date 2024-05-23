@@ -1,7 +1,21 @@
 # Integration 2
 
 ## ARDUINO UNO R3
+<!-- TOC -->
 
+- [ARDUINO UNO R3](#arduino-uno-r3)
+- [Libraries](#libraries)
+  - [Arduino Multi-function Shield LED Library](#arduino-multi-function-shield-led-library)
+  - [Arduino UNO Timer Library](#arduino-uno-timer-library)
+  - [Arduino UNO Button Library](#arduino-uno-button-library)
+  - [Arduino UNO Callback Library](#arduino-uno-callback-library)
+- [Week 1](#week-1)
+- [Week 2](#week-2)
+- [Week 3](#week-3)
+- [Week 4](#week-4)
+- [Week 5](#week-5)
+
+<!-- /TOC -->
 <details>
 
 <summary>
@@ -227,6 +241,185 @@ int main(void) {
 
     while (1) {
         // Main loop
+    }
+
+    return 0;
+}
+```
+
+### Arduino UNO Button Library
+
+#### Summary
+
+This project provides a button library for the Arduino UNO V3 with ATmega328P. The library allows for easy initialization and handling of button presses using interrupts and debouncing techniques.
+
+#### Benefits
+
+- **Ease of Use**: Simplifies button initialization and handling.
+- **Interrupt-Driven**: Uses interrupts for responsive button handling.
+- **Debouncing**: Includes debouncing logic to avoid false triggers.
+- **Educational**: Learn how to handle hardware interrupts and debouncing in embedded systems.
+
+#### Functionality
+
+The library provides functions to initialize buttons, enable interrupts, check button states, and handle debouncing:
+
+- **initButtons()**: Initializes all button pins as input and enables interrupts.
+- **waitForButtonPress()**: Waits for any button press and returns the button number.
+- **buttonPushed(int button)**: Checks if a specific button is pushed.
+- **buttonReleased(int button)**: Checks if a specific button is released.
+- **enableButtonInterrupts()**: Enables interrupts for button pins.
+- **buttonCallback()**: To be called by the interrupt service routine for debouncing and state management.
+
+#### How to Use
+
+##### Example Code
+
+Here's a snippet from the `main.c` file demonstrating the button library usage:
+
+```c
+#include "button.h"
+#include "usart.h"
+#include "callback.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include <stdio.h>
+
+// Main function
+int main(void)
+{
+    // Initialize USART for debugging
+    initUSART();
+    printf("USART Initialized\n");
+
+    // Initialize buttons
+    initButtons();
+    printf("Buttons Initialized\n");
+
+    // Set button callback
+    setButtonCallback(buttonCallback);
+    printf("Added button interrupts\n");
+
+    // Main loop
+    while (1)
+    {
+        // Wait for a button press
+        int button = waitForButtonPress();
+
+        // Print which button was pressed
+        switch (button)
+        {
+        case BUTTON1_PIN:
+            printf("Button 1 pressed\n");
+            break;
+        case BUTTON2_PIN:
+            printf("Button 2 pressed\n");
+            break;
+        case BUTTON3_PIN:
+            printf("Button 3 pressed\n");
+            break;
+        default:
+            printf("Unknown button pressed\n");
+            break;
+        }
+    }
+
+    return 0;
+}
+```
+
+### Arduino UNO Callback Library
+
+#### Summary
+
+The callback library provides a mechanism to set and call user-defined callback functions for various events, such as timer interrupts and button presses. This allows for flexible and modular code design, enabling different parts of the code to respond to hardware events.
+
+#### Benefits
+
+- **Modularity**: Decouples event handling from the main logic.
+- **Flexibility**: Allows setting custom callback functions for different events.
+- **Maintainability**: Makes the code easier to manage and extend.
+- **Educational**: Demonstrates the use of function pointers and interrupt handling in embedded systems.
+
+#### Functionality
+
+The library provides functions to set callback functions for timers and buttons:
+
+- **setTimer0Callback(Timer0Callback callback)**: Sets the callback function for Timer0 interrupt.
+- **setTimer1Callback(Timer1Callback callback)**: Sets the callback function for Timer1 interrupt.
+- **setTimer2Callback(Timer2Callback callback)**: Sets the callback function for Timer2 interrupt.
+- **setButtonCallback(ButtonCallback callback)**: Sets the callback function for button interrupt.
+
+#### How to Use
+
+##### Example Code
+
+Here's a snippet from the `main.c` file demonstrating the callback library usage:
+
+```c
+// Timer0 callback function
+void timer0Task(void)
+{
+    printf("Timer 0 interrupt triggered\n");
+}
+
+// Timer1 callback function
+void timer1Task(void)
+{
+    printf("Timer 1 interrupt triggered\n");
+}
+
+// Timer2 callback function
+void timer2Task(void)
+{
+    printf("Timer 2 interrupt triggered\n");
+}
+
+// Button callback function
+void buttonTask(void)
+{
+    printf("Button interrupt triggered\n");
+}
+
+void initTimers(void)
+{
+    initTimer0();
+    initTimer1();
+    initTimer2();
+}
+
+void startTimers(void)
+{
+    startTimer0();
+    startTimer1();
+    startTimer2();
+}
+
+// Main function
+int main(void)
+{
+    // Initialize USART for debugging
+    initUSART();
+    printf("USART Initialized\n");
+
+    // Set timer callbacks
+    setTimer0Callback(timer0Task);
+    setTimer1Callback(timer1Task);
+    setTimer2Callback(timer2Task);
+
+    // Set button callback
+    setButtonCallback(buttonTask);
+
+    // Configure and start timers
+    initTimers(); // Initialize timers
+    startTimers(); // Start timers
+
+    // Main loop
+    while (1)
+    {
+        // Main code can go here
+        _delay_ms(1000); // Delay to simulate main loop work
     }
 
     return 0;
