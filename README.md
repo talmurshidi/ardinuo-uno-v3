@@ -426,6 +426,64 @@ int main(void)
 }
 ```
 
+### Arduino UNO Buzzer Library
+
+#### Summary
+
+This project provides a buzzer library for the Arduino UNO V3 with ATmega328P. The library allows for easy control of a buzzer to play different tones using Timer2 for precise timing.
+
+#### Benefits
+
+- **Ease of Use**: Simplifies buzzer control with easy-to-use functions.
+- **Interrupt-Driven**: Uses Timer2 interrupts for accurate tone generation.
+- **Modular Design**: Integrates seamlessly with other libraries like USART for debugging.
+- **Educational**: Helps in understanding timer interrupts and hardware control in embedded systems.
+
+#### Functionality
+
+The library provides functions to enable and disable the buzzer, play tones at specified frequencies and durations, and handle timer overflow interrupts for precise tone timing.
+
+- **enableBuzzer()**: Enables the buzzer by setting the appropriate pin as output.
+- **disableBuzzer()**: Disables the buzzer by setting the appropriate pin high.
+- **playTone(float frequency, uint32_t duration)**: Plays a tone with the specified frequency and duration.
+- **buzzerCallback()**: Callback function called by the Timer2 overflow interrupt to manage tone playback.
+
+#### How to Use
+
+##### Example Code
+
+Here's a snippet from the `main.c` file demonstrating the buzzer library usage:
+
+```c
+#include "buzzer.h"
+#include <util/delay.h>
+#include <stdio.h>
+#include "usart.h"
+
+// Main function
+int main(void)
+{
+    // Initialize USART for debugging
+    initUSART();
+    printf("USART Initialized\n");
+
+    // Initialize the buzzer
+    enableBuzzer();
+
+    // Define an array of frequencies for the notes
+    float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};
+
+    // Play a series of tones
+    for (int note = 0; note < 8; note++)
+    {
+        playTone(frequencies[note], 150); // Play each note for 150ms
+        _delay_ms(300); // Wait for 300ms to ensure the previous tone completes
+    }
+
+    return 0;
+}
+```
+
 </details>
 
 <details>

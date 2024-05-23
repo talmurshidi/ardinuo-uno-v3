@@ -20,7 +20,6 @@
 #define BUZZER_PORT PORTD
 
 // Function declarations
-void initBuzzer(void);
 void enableBuzzer(void);
 void disableBuzzer(void);
 void playTone(float frequency, uint32_t duration);

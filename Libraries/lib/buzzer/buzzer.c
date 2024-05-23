@@ -1,65 +1,81 @@
 #include "buzzer.h"
-#include "callback.h"
 #include <avr/io.h>
+#define __DELAY_BACKWARD_COMPATIBLE__
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
-volatile uint32_t buzzerDuration = 0;
-volatile uint32_t buzzerCount = 0;
+// Global variables to store tone frequency and duration
+volatile uint32_t toneDuration;
+volatile uint32_t toneCycles;
 
-void initBuzzer(void)
+void initTimerOverflow()
 {
-  // Set the buzzer pin as output
-  BUZZER_DDR |= (1 << BUZZER_PIN);
-  // Configure Timer 2 for CTC mode
-  TCCR2A = (1 << WGM21);  // CTC mode
-  TIMSK2 = (1 << OCIE2A); // Enable Timer 2 compare interrupt
+  // Initialize Timer2
+  TCCR2A = 0;            // Normal operation
+  TCCR2B = 0;            // Reset Timer/Counter Control Registers
+  TCNT2 = 0;             // Reset Timer Counter
+  TIMSK2 = (1 << TOIE2); // Enable overflow interrupt
+}
 
+void startTimerOverflow()
+{
+  // Start Timer2 with prescaler 64
+  TCCR2B |= (1 << CS22);
   sei(); // Enable global interrupts
 }
 
+void stopTimerOverflow()
+{
+  TCCR2B &= ~((1 << CS22) | (1 << CS21) | (1 << CS20)); // Stop the timer
+}
+
+// Enable the buzzer (turn it on)
 void enableBuzzer(void)
 {
-  // Ensure the buzzer pin is set as output
-  BUZZER_DDR |= (1 << BUZZER_PIN);
+  BUZZER_DDR |= (1 << BUZZER_PIN);   // Set the buzzer pin as output
+  BUZZER_PORT &= ~(1 << BUZZER_PIN); // Set the buzzer pin low (active low)
 }
 
+// Disable the buzzer (turn it off)
 void disableBuzzer(void)
 {
-  // Stop Timer 2 by clearing the clock select bits
-  TCCR2B &= ~(_BV(CS22) | _BV(CS21) | _BV(CS20));
-
-  // Reset the timer counter to ensure it starts from 0 when re-enabled
-  TCNT2 = 0;
-
-  // Set the buzzer pin low to disable it
-  BUZZER_PORT |= (1 << BUZZER_PIN);
-
-  // Disable the compare interrupt to prevent the ISR from being triggered
-  TIMSK2 &= ~(1 << OCIE2A);
+  BUZZER_PORT |= (1 << BUZZER_PIN); // Set the buzzer pin high (active low)
 }
 
+// Play a tone with a specific frequency and duration using Timer2
 void playTone(float frequency, uint32_t duration)
 {
-  uint16_t ocrValue = (F_CPU / (2 * 64 * frequency)) - 1;
-  OCR2A = ocrValue;
+  uint32_t periodInMicro = (uint32_t)(1000000 / frequency); // Calculate the period in microseconds from the frequency
+  toneDuration = (frequency * duration) / 1000;             // Calculate the number of cycles for the given duration
+  toneCycles = periodInMicro / 2;
 
-  buzzerDuration = (duration * 1000) / (ocrValue * 2);
-  buzzerCount = 0;
-
-  // Start Timer 2 with a prescaler of 64
-  TCCR2B = (1 << CS22);
+  initTimerOverflow();
+  startTimerOverflow();
 }
 
-// To be called by interrupts
+// Timer2 overflow interrupt service routine
+ISR(TIMER2_OVF_vect)
+{
+  buzzerCallback();
+}
+
+// Buzzer callback function
 void buzzerCallback(void)
 {
-  if (buzzerCount < buzzerDuration)
+  static uint32_t cycleCounter = 0;
+
+  if (cycleCounter < toneDuration)
   {
-    BUZZER_PORT ^= (1 << BUZZER_PIN); // Toggle the buzzer pin
-    buzzerCount++;
+    enableBuzzer();
+    _delay_us(toneCycles);
+    disableBuzzer();
+    _delay_us(toneCycles);
+    cycleCounter++;
   }
   else
   {
+    stopTimerOverflow();
     disableBuzzer();
+    cycleCounter = 0;
   }
 }
