@@ -69,6 +69,21 @@
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "ms-vscode.cpptools",
 		"editor.formatOnPaste": true,
+		"editor.someSettings": true,
+		    "markdownlint.config": {
+        "default": true,
+				"MD033":{
+					"allowed_elements": [
+						"details",
+						"summary"
+					]	
+				},
+				"MD024": {
+					"siblings_only": true
+				},
+        "MD007": { "indent": 4 },
+        "no-hard-tabs": false
+    },
 		"cSpell.words": [
 			"ADCSRA",
 			"ADMUX",
@@ -77,11 +92,14 @@
 			"AVCC",
 			"bitorder",
 			"COMPA",
+			"cpptools",
 			"DDRB",
 			"DDRC",
 			"DDRD",
+			"FDEV",
 			"LEDS",
 			"LSBFIRST",
+			"microcontrollers",
 			"millisecs",
 			"MSBFIRST",
 			"OCIE",
@@ -95,18 +113,21 @@
 			"PRESCALE",
 			"prescaler",
 			"prescaling",
+			"Referance",
 			"RXEN",
 			"setbaud",
 			"TCCR",
+			"TCNT",
 			"TIMSK",
+			"TXEN",
 			"UBRR",
 			"UBRRH",
+			"UBRRL",
+			"UCSR",
+			"UCSZ",
+			"UDRE",
 			"USART",
 			"vect"
-		],
-		"files.associations": {
-			"delay.h": "c",
-			"stdio.h": "c"
-		}
+		]
 	}
 }
