@@ -76,7 +76,8 @@
 					"allowed_elements": [
 						"details",
 						"summary",
-						"br"
+						"br",
+						"hr"
 					]	
 				},
 				"MD024": {

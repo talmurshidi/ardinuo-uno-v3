@@ -167,6 +167,7 @@ int main(void)
 ```
 
 [Back to top](#integration-2)
+<hr>
 <br>
 
 ### Arduino UNO Timer Library
@@ -248,6 +249,7 @@ int main(void) {
 ```
 
 [Back to top](#integration-2)
+<hr>
 <br>
 
 ### Arduino UNO Button Library
@@ -331,6 +333,10 @@ int main(void)
     return 0;
 }
 ```
+
+[Back to top](#integration-2)
+<hr>
+<br>
 
 ### Arduino UNO Callback Library
 
@@ -430,6 +436,7 @@ int main(void)
 ```
 
 [Back to top](#integration-2)
+<hr>
 <br>
 
 ### Arduino UNO Buzzer Library
@@ -491,6 +498,7 @@ int main(void)
 ```
 
 [Back to top](#integration-2)
+<hr>
 <br>
 
 </details>
