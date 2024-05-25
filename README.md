@@ -1,22 +1,7 @@
 # Integration 2
 
 ## ARDUINO UNO R3
-<!-- TOC -->
 
-- [ARDUINO UNO R3](#arduino-uno-r3)
-- [Libraries](#libraries)
-  - [Arduino Multi-function Shield LED Library](#arduino-multi-function-shield-led-library)
-  - [Arduino UNO Timer Library](#arduino-uno-timer-library)
-  - [Arduino UNO Button Library](#arduino-uno-button-library)
-  - [Arduino UNO Callback Library](#arduino-uno-callback-library)
-  - [Arduino UNO Buzzer Library](#arduino-uno-buzzer-library)
-- [Week 1](#week-1)
-- [Week 2](#week-2)
-- [Week 3](#week-3)
-- [Week 4](#week-4)
-- [Week 5](#week-5)
-
-<!-- /TOC -->
 <details>
 
 <summary>
@@ -25,7 +10,7 @@
 
 </summary>
 
-### Arduino Multi-function Shield LED Library
+### [Arduino Multi-function Shield LED Library](./Libraries/lib/led)
 
 #### Summary
 
@@ -166,11 +151,11 @@ int main(void)
 }
 ```
 
-[Back to top](#integration-2)
+[Back to top *Libraries*](#libraries)
 <hr>
 <br>
 
-### Arduino UNO Timer Library
+### [Arduino UNO Timer Library](./Libraries/lib/timer)
 
 #### Summary
 
@@ -248,11 +233,11 @@ int main(void) {
 }
 ```
 
-[Back to top](#integration-2)
+[Back to top *Libraries*](#libraries)
 <hr>
 <br>
 
-### Arduino UNO Button Library
+### [Arduino UNO Button Library](./Libraries/lib/buzzer)
 
 #### Summary
 
@@ -334,11 +319,11 @@ int main(void)
 }
 ```
 
-[Back to top](#integration-2)
+[Back to top *Libraries*](#libraries)
 <hr>
 <br>
 
-### Arduino UNO Callback Library
+### [Arduino UNO Callback Library](./Libraries/lib/callback)
 
 #### Summary
 
@@ -435,11 +420,11 @@ int main(void)
 }
 ```
 
-[Back to top](#integration-2)
+[Back to top *Libraries*](#libraries)
 <hr>
 <br>
 
-### Arduino UNO Buzzer Library
+### [Arduino UNO Buzzer Library](./Libraries/lib/buzzer)
 
 #### Summary
 
@@ -480,9 +465,6 @@ int main(void)
     initUSART();
     printf("USART Initialized\n");
 
-    // Initialize the buzzer
-    enableBuzzer();
-
     // Define an array of frequencies for the notes
     float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};
 
@@ -497,7 +479,67 @@ int main(void)
 }
 ```
 
-[Back to top](#integration-2)
+[Back to top *Libraries*](#libraries)
+<hr>
+<br>
+
+### [Arduino UNO Random Library](./Libraries/lib/random)
+
+#### Summary
+
+This project provides a random number generation library for the Arduino UNO V3 with ATmega328P. The library uses the Analog-to-Digital Converter (ADC) to generate random values, leveraging the inherent noise in the ADC readings to improve randomness. This library is useful for applications that require random number generation, such as simulations, games, and security.
+
+#### Benefits
+
+- **Ease of Use**: Simplifies random number generation with easy-to-use functions.
+- **Hardware-Based Randomness**: Uses ADC readings to generate random values, providing better randomness than purely software-based methods.
+- **Modular Design**: Integrates seamlessly with other libraries and projects.
+- **Educational**: Helps in understanding ADC usage and random number generation in embedded systems.
+
+#### Functionality
+
+The library provides functions to initialize the ADC for randomness, generate random numbers, and seed the random number generator using ADC readings.
+
+- **initRandom()**: Initializes the ADC for use as a random number source.
+- **getRandomNumber()**: Generates a random number based on ADC readings.
+- **seedRandom()**: Seeds the random number generator using an ADC reading.
+
+#### How to Use
+
+##### Example Code
+
+Here's a snippet from the `main.c` file demonstrating the random library usage:
+
+```c
+#include "random.h"
+#include <util/delay.h>
+#include <stdio.h>
+#include "usart.h"
+
+// Main function
+int main(void)
+{
+    // Initialize USART for debugging
+    initUSART();
+    printf("USART Initialized\n");
+
+    // Initialize the random number generator
+    initRandom();
+    seedRandom();
+
+    // Generate and print random numbers
+    for (int i = 0; i < 10; i++)
+    {
+        uint16_t randomValue = getRandomNumber();
+        printf("Random Value: %u\n", randomValue);
+        _delay_ms(500); // Wait for 500ms
+    }
+
+    return 0;
+}
+```
+
+[Back to top *Libraries*](#libraries)
 <hr>
 <br>
 
@@ -536,6 +578,284 @@ int main(void)
 ## Week 4
 
 </summary>
+
+### Stopwatch Project
+
+#### Summary
+
+This project implements a digital stopwatch using an AVR microcontroller. It allows you to start, stop, and reset the timer using buttons, and displays the elapsed time on a 4-digit LED display. The stopwatch also includes an LED light show feature that activates when the minute counter increments.
+
+#### Benefits
+
+**Educational Value**: Provides hands-on experience with timers, interrupts, and LED displays in embedded systems.
+**Practical Application**: Demonstrates how to create a real-time stopwatch, a common feature in many electronic devices.
+**Hardware Interaction**: Enhances skills in interfacing with buttons, displays, and LEDs using an AVR microcontroller.
+**Programming Skills**: Improves understanding of C programming in the context of embedded systems and real-time applications.
+
+#### Functionality
+
+**Start the Stopwatch**: Press button S1 to start the stopwatch.
+**Stop the Stopwatch**: Press button S2 to stop the stopwatch.
+**Reset the Stopwatch**: Press button S3 to reset the stopwatch to zero.
+**Time Display**: Continuously updates the elapsed time on a 4-digit LED display.
+**LED Light Show**: Activates an LED light sequence every time the minute counter increments.
+
+#### Code Snippet
+
+```c
+# include <avr/io.h>
+# include <avr/interrupt.h>
+# include <util/delay.h>
+# include "display.h"
+# include "button.h"
+# include "usart.h"
+# include "timer.h"
+# include "callback.h"
+# include "led.h"
+
+// Global variables
+volatile uint8_t seconds = 0;
+volatile uint8_t minutes = 0;
+volatile uint8_t is_running = 0;
+
+void init()
+{
+  initUSART();
+  initDisplay();
+  initTimer1();
+  initButtons();
+  initLeds();
+  sei(); // Enable global interrupts
+}
+
+void updateDisplayLoop(uint8_t minutes, uint8_t seconds)
+{
+  int refreshRate = 10;
+  int cyclesPerSecond = 1000 / (refreshRate * 4);
+  writeTimeAndWait(minutes, seconds, cyclesPerSecond);
+}
+
+void startStopwatch()
+{
+  if (!is_running)
+  {
+    is_running = 1;
+    startTimer1();
+  }
+}
+
+void stopStopwatch()
+{
+  if (is_running)
+  {
+    is_running = 0;
+    stopTimer1();
+  }
+}
+
+void resetStopwatch()
+{
+  stopStopwatch();
+  seconds = 0;
+  minutes = 0;
+  updateDisplayLoop(minutes, seconds);
+  startStopwatch();
+}
+
+void displayLedsOneByOne()
+{
+  for (int i = 0; i < NUMBER_OF_LEDS; i++)
+  {
+    lightUpOneLed(i);
+    _delay_ms(100);
+    lightDownOneLed(i);
+    _delay_ms(100);
+  }
+}
+
+void tick()
+{
+  if (is_running)
+  {
+    seconds++;
+    if (seconds >= 60)
+    {
+      seconds = 0;
+      minutes++;
+      if (minutes >= 60)
+      {
+        minutes = 0;
+      }
+      displayLedsOneByOne();
+    }
+    printf("%d:%d\n", minutes, seconds);
+  }
+}
+
+void timerCallback()
+{
+  tick();
+}
+
+int main()
+{
+  init();
+  setTimer1Callback(timerCallback);
+
+  printf("Start the stopwatch by pressing button S1, stop by pressing button S2, and reset with S3\n");
+
+  while (1)
+  {
+    if (buttonPushed(1))
+    {
+      startStopwatch();
+    }
+    if (buttonPushed(2))
+    {
+      stopStopwatch();
+    }
+    if (buttonPushed(3))
+    {
+      resetStopwatch();
+    }
+    if (is_running)
+    {
+      updateDisplayLoop(minutes, seconds);
+    }
+  }
+
+  return 0;
+}
+```
+
+#### Challenges and Problems
+
+Real-Time Constraints: Ensuring accurate timekeeping with the use of timers and interrupts.
+Button Debouncing: Handling multiple button presses accurately without false triggering.
+LED Control: Managing the LED light show sequence while keeping the stopwatch running.
+Display Refresh: Maintaining a smooth and continuous update of the 4-digit LED display.
+
+By addressing these challenges, this stopwatch project provides a comprehensive understanding of real-time embedded systems and the use of hardware components in a practical application.
+
+[Back to top *Week 4*](#week-4)
+<hr>
+<br>
+
+### [Lunar Lander Game](./Week4/W4-Project-Lunar-Lander)
+
+#### Summary
+
+The Lunar Lander game is a simplified simulation of landing a lunar module on the surface of the moon. The game's objective is to safely land the lunar module by controlling its descent speed using bursts of fuel. The game starts with the module at a high altitude, and the player must use the middle button to control the bursts and manage the fuel efficiently. The game provides real-time feedback on the module's distance to the surface, speed, and remaining fuel.
+
+#### Benefits
+
+**Educational Value**: This project helps in understanding the principles of acceleration, gravity, and fuel consumption.
+**Hardware Interaction**: It involves working with various hardware components such as LEDs, buttons, and displays.
+**Programming Skills**: Enhances skills in C programming, especially in handling interrupts and timers in embedded systems.
+**Problem-Solving**: Provides a practical application of problem-solving in real-time systems.
+
+#### Functionality
+
+**Distance Display**: The 4-digit LED display shows the distance to the lunar surface.
+**Fuel Level Indication**: LEDs indicate the remaining fuel level. LEDs flash faster as the fuel level decreases.
+**Fuel Bursts**: The player can use up to 50 liters of fuel per second by pressing the buttons.
+**Real-Time Simulation**: The game updates the lunar module's speed and distance every second.
+**Sound Effects**: Different tones are played for successful landing and crash.
+**Logging**: The game logs the distance, speed, burst, and fuel every second, and prints a final report at the end.
+
+#### Code Snippet
+
+```c
+# include "led.h"
+# include "button.h"
+# include "display.h"
+# include "usart.h"
+# include "timer.h"
+# include "callback.h"
+# include "buzzer.h"
+# include "simulation.h"
+# include <avr/io.h>
+# include <avr/interrupt.h>
+# include <stdio.h>
+# include <util/delay.h>
+
+void gameButtonCallback();
+void updateFlageCallback();
+
+void setup()
+{
+  initLeds();
+  initButtons();
+  initDisplay();
+  initUSART();
+  initTimer1();
+  startTimer1();
+  setButtonCallback(gameButtonCallback);
+  setTimer1Callback(updateFlageCallback);
+
+  // Enable global interrupts
+  sei();
+
+  printf("Setup complete\n");
+}
+
+void gameButtonCallback()
+{
+  buttonCallback();
+  handleThrust();
+}
+
+void updateFlageCallback()
+{
+  setUpdateFlag(1);
+}
+
+void loop()
+{
+  if (getUpdateFlag() || getBurst() != 0)
+  {
+    setUpdateFlag(0);
+    handleSimulation();
+  }
+}
+
+void startGame()
+{
+  printf("\nWelcome to Lunar Lander game!\n");
+  while (!getGameFinished())
+  {
+    loop();
+  }
+
+  printf("\nPress S1 to start a new game, press any key to exit!\n");
+  int pressedButton = waitForButtonPress();
+  if (pressedButton == 1)
+  {
+    resetGame();
+    startGame();
+  }
+}
+
+int main(void)
+{
+  setup();
+  startGame();
+  return 0;
+}
+```
+
+#### Challenges and Problems
+
+**Real-Time Constraints**: Ensuring the game logic runs accurately every second using timers and interrupts.
+**Hardware Interaction**: Managing multiple hardware components simultaneously, such as LEDs, buttons, and displays.
+**Memory Management**: Handling limited memory resources efficiently, especially when logging game data.
+**Debugging**: Debugging real-time systems can be challenging due to the asynchronous nature of interrupts and the need for precise timing.
+
+By addressing these challenges, the Lunar Lander game project provides a comprehensive learning experience in embedded systems, real-time programming, and hardware-software integration.
+
+[Back to top *Week 4*](#week-4)
+<hr>
+<br>
 
 </details>
 

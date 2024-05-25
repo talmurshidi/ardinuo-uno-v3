@@ -20,14 +20,13 @@ void init()
   initTimer1();
   initButtons();
   initLeds();
-  // startTimer();
   sei(); // Enable global interrupts
 }
 
 // Wrapper function to continuously update the time on display
 void updateDisplayLoop(uint8_t minutes, uint8_t seconds)
 {
-  int refreshRate = 10;                           // Update rate in milliseconds per digit
+  int refreshRate = 10;
   int cyclesPerSecond = 1000 / (refreshRate * 4); // Calculate how many full cycles per second
   writeTimeAndWait(minutes, seconds, cyclesPerSecond);
 }
