@@ -579,7 +579,7 @@ int main(void)
 
 </summary>
 
-### Stopwatch Project
+### [Stopwatch Project](./Week4/W4-Stopwatch)
 
 #### Summary
 
