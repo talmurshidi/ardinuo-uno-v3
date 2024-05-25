@@ -739,18 +739,18 @@ This project implements a digital stopwatch using an AVR microcontroller. It all
 
 #### Benefits
 
-**Educational Value**: Provides hands-on experience with timers, interrupts, and LED displays in embedded systems.
-**Practical Application**: Demonstrates how to create a real-time stopwatch, a common feature in many electronic devices.
-**Hardware Interaction**: Enhances skills in interfacing with buttons, displays, and LEDs using an AVR microcontroller.
-**Programming Skills**: Improves understanding of C programming in the context of embedded systems and real-time applications.
+- **Educational Value**: Provides hands-on experience with timers, interrupts, and LED displays in embedded systems.
+- **Practical Application**: Demonstrates how to create a real-time stopwatch, a common feature in many electronic devices.
+- **Hardware Interaction**: Enhances skills in interfacing with buttons, displays, and LEDs using an AVR microcontroller.
+- **Programming Skills**: Improves understanding of C programming in the context of embedded systems and real-time applications.
 
 #### Functionality
 
-**Start the Stopwatch**: Press button S1 to start the stopwatch.
-**Stop the Stopwatch**: Press button S2 to stop the stopwatch.
-**Reset the Stopwatch**: Press button S3 to reset the stopwatch to zero.
-**Time Display**: Continuously updates the elapsed time on a 4-digit LED display.
-**LED Light Show**: Activates an LED light sequence every time the minute counter increments.
+- **Start the Stopwatch**: Press button S1 to start the stopwatch.
+- **Stop the Stopwatch**: Press button S2 to stop the stopwatch.
+- **Reset the Stopwatch**: Press button S3 to reset the stopwatch to zero.
+- **Time Display**: Continuously updates the elapsed time on a 4-digit LED display.
+- **LED Light Show**: Activates an LED light sequence every time the minute counter increments.
 
 #### Code Snippet
 
@@ -901,19 +901,24 @@ The Lunar Lander game is a simplified simulation of landing a lunar module on th
 
 #### Benefits
 
-**Educational Value**: This project helps in understanding the principles of acceleration, gravity, and fuel consumption.
-**Hardware Interaction**: It involves working with various hardware components such as LEDs, buttons, and displays.
-**Programming Skills**: Enhances skills in C programming, especially in handling interrupts and timers in embedded systems.
-**Problem-Solving**: Provides a practical application of problem-solving in real-time systems.
+- **Educational Value**: This project helps in understanding the principles of acceleration, gravity, and fuel consumption.
+- **Hardware Interaction**: It involves working with various hardware components such as LEDs, buttons, and displays.
+- **Programming Skills**: Enhances skills in C programming, especially in handling interrupts and timers in embedded systems.
+- **Problem-Solving**: Provides a practical application of problem-solving in real-time systems.
 
 #### Functionality
 
-**Distance Display**: The 4-digit LED display shows the distance to the lunar surface.
-**Fuel Level Indication**: LEDs indicate the remaining fuel level. LEDs flash faster as the fuel level decreases.
-**Fuel Bursts**: The player can use up to 50 liters of fuel per second by pressing the buttons.
-**Real-Time Simulation**: The game updates the lunar module's speed and distance every second.
-**Sound Effects**: Different tones are played for successful landing and crash.
-**Logging**: The game logs the distance, speed, burst, and fuel every second, and prints a final report at the end.
+- **Distance Display**: The 4-digit LED display shows the distance to the lunar surface.
+
+- **Fuel Level Indication**: LEDs indicate the remaining fuel level. LEDs flash faster as the fuel level decreases.
+
+- **Fuel Bursts**: The player can use up to 50 liters of fuel per second by pressing the buttons.
+
+- **Real-Time Simulation**: The game updates the lunar module's speed and distance every second.
+
+- **Sound Effects**: Different tones are played for successful landing and crash.
+
+- **Logging**: The game logs the distance, speed, burst, and fuel every second, and prints a final report at the end.
 
 #### Code Snippet
 
@@ -998,10 +1003,10 @@ int main(void)
 
 #### Challenges and Problems
 
-**Real-Time Constraints**: Ensuring the game logic runs accurately every second using timers and interrupts.
-**Hardware Interaction**: Managing multiple hardware components simultaneously, such as LEDs, buttons, and displays.
-**Memory Management**: Handling limited memory resources efficiently, especially when logging game data.
-**Debugging**: Debugging real-time systems can be challenging due to the asynchronous nature of interrupts and the need for precise timing.
+- **Real-Time Constraints**: Ensuring the game logic runs accurately every second using timers and interrupts.
+- **Hardware Interaction**: Managing multiple hardware components simultaneously, such as LEDs, buttons, and displays.
+- **Memory Management**: Handling limited memory resources efficiently, especially when logging game data.
+- **Debugging**: Debugging real-time systems can be challenging due to the asynchronous nature of interrupts and the need for precise timing.
 
 By addressing these challenges, the Lunar Lander game project provides a comprehensive learning experience in embedded systems, real-time programming, and hardware-software integration.
 
