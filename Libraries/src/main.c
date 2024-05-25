@@ -255,9 +255,6 @@ int main(void)
   initUSART();
   printf("USART Initialized\n");
 
-  // Initialize the buzzer
-  enableBuzzer();
-
   // Define an array of frequencies for the notes
   float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};
 
@@ -265,7 +262,7 @@ int main(void)
   for (int note = 0; note < 8; note++)
   {
     playTone(frequencies[note], 150); // Play each note for 150ms
-    _delay_ms(300); // Wait for 300ms to ensure the previous tone completes
+    _delay_ms(300);                   // Wait for 300ms to ensure the previous tone completes
   }
 
   return 0;

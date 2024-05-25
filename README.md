@@ -27,7 +27,7 @@ This project provides a comprehensive library for controlling LEDs on the Arduin
 
 The library includes the following features:
 
-#### Initialization and Single LED Control
+##### Initialization and Single LED Control
 
 - **initLeds()**: Initializes all LED pins as output and turns them off initially.
 - **enableOneLed(int ledNumber)**: Enables a single LED by setting its pin as output.
@@ -35,20 +35,20 @@ The library includes the following features:
 - **lightDownOneLed(int ledNumber)**: Turns off a single LED.
 - **lightToggleOneLed(int ledNumber)**: Toggles the state of a single LED.
 
-#### Multiple LEDs Control
+##### Multiple LEDs Control
 
 - **enableMultipleLeds(uint8_t leds)**: Enables multiple LEDs by setting their pins as output.
 - **lightUpMultipleLeds(uint8_t leds)**: Lights up multiple LEDs.
 - **lightDownMultipleLeds(uint8_t leds)**: Turns off multiple LEDs.
 
-#### All LEDs Control
+##### All LEDs Control
 
 - **enableAllLeds()**: Enables all LEDs by setting their pins as output.
 - **lightUpAllLeds()**: Lights up all LEDs.
 - **lightDownAllLeds()**: Turns off all LEDs.
 - **lightToggleAllLeds()**: Toggles the state of all LEDs.
 
-#### LED Dimming and Fading
+##### LED Dimming and Fading
 
 - **dimLed(int ledNumber, int percentage, int duration)**: Dims a single LED by a given percentage over a specified duration.
 - **fadeInLed(int ledNumber, int duration)**: Fades in a single LED over a specified duration.
@@ -151,6 +151,83 @@ int main(void)
 }
 ```
 
+#### Register Configurations and Settings
+
+The following register configurations are used in the library to control the LED functionalities:
+
+##### LED Pin Definitions
+
+- **LED0_PIN**: Pin 10 (PB2)
+- **LED1_PIN**: Pin 11 (PB3)
+- **LED2_PIN**: Pin 12 (PB4)
+- **LED3_PIN**: Pin 13 (PB5)
+
+##### Data Direction Register (DDR) and Port Register
+
+- **LED_DDR**: DDRB (Data Direction Register for Port B)
+- **LED_PORT**: PORTB (Port B Data Register)
+  
+##### Enabling LEDs
+
+To enable an LED, the corresponding bit in the DDRB register is set to 1. This configures the pin as an output. The bitwise `OR` operation (`|=`) is used to set the specific bit while leaving other bits unchanged.
+
+For example, to enable `LED0` (connected to `PB2`):
+
+```c
+LED_DDR |= (1 << LED0_PIN);
+```
+
+Explanation:
+
+- `1 << LED0_PIN` shifts the binary number `1` left by `LED0_PIN` positions, resulting in `00000100` for `PB2`.
+- `LED_DDR |=` performs a bitwise OR between the current value of `LED_DDR` and `00000100`, setting the bit for `PB2` to `1`.
+  
+##### Lighting Up LEDs
+
+To light up an LED, the corresponding bit in the PORTB register is cleared (active low). The bitwise `AND` operation (`&=`) with the complement (`~`) is used to clear the specific bit while leaving other bits unchanged.
+
+For example, to light up `LED0` (connected to `PB2`):
+
+```c
+LED_PORT &= ~(1 << LED0_PIN);
+```
+
+Explanation:
+
+- `1 << LED0_PIN` shifts the binary number `1` left by `LED0_PIN` positions, resulting in `00000100` for `PB2`.
+- `~(1 << LED0_PIN)` inverts this, resulting in `11111011`.
+- `LED_PORT &=` performs a bitwise `AND` between the current value of `LED_PORT` and `11111011`, clearing the bit for `PB2` to `0`.
+
+##### Turning Off LEDs
+
+To turn off an LED, the corresponding bit in the `PORTB` register is set (active low). The bitwise `OR` operation (`|=`) is used to set the specific bit while leaving other bits unchanged.
+
+For example, to turn off `LED0` (connected to `PB2`):
+
+```c
+LED_PORT |= (1 << LED0_PIN);
+```
+
+Explanation:
+
+- `1 << LED0_PIN` shifts the binary number `1` left by `LED0_PIN` positions, resulting in `00000100` for `PB2`.
+- `LED_PORT |=` performs a bitwise `OR` between the current value of `LED_PORT` and `00000100`, setting the bit for `PB2` to `1`.
+
+##### Toggling LEDs
+
+To toggle the state of an LED, the corresponding bit in the `PORTB` register is inverted. The bitwise `XOR` operation (`^=`) is used to flip the specific bit while leaving other bits unchanged.
+
+For example, to toggle `LED0` (connected to `PB2`):
+
+```c
+LED_PORT ^= (1 << LED0_PIN);
+```
+
+Explanation:
+
+- `1 << LED0_PIN` shifts the binary number `1` left by `LED0_PIN` positions, resulting in `00000100` for `PB2`.
+- `LED_PORT ^=` performs a bitwise `XOR` between the current value of `LED_PORT` and `00000100`, flipping the bit for `PB2`.
+
 [Back to top *Libraries*](#libraries)
 <hr>
 <br>
@@ -232,6 +309,81 @@ int main(void) {
     return 0;
 }
 ```
+
+#### Register Configurations and Settings
+
+In this section, we will explain the operations performed in the timer library using various bitwise operations like OR, AND, and XOR.
+
+##### Timer Configuration Operations
+
+###### Initialize Timer0 for 2kHz Interrupt (0.5ms Interval)
+
+```c
+void initTimer0(void)
+{
+    TCCR0A = 0; // Clear TCCR0A register
+    TCCR0B = 0; // Clear TCCR0B register
+    TCNT0 = 0;  // Initialize counter value to 0
+
+    // Set compare match register for 2kHz increments (0.5ms interval)
+    OCR0A = 124; // Calculation: (16MHz / (2kHz * 64)) - 1 = 124
+
+    // Set CTC mode (Clear Timer on Compare Match)
+    TCCR0A |= (1 << WGM01);
+
+    // Set prescaler to 64 and start the timer
+    TCCR0B |= (1 << CS01) | (1 << CS00);
+
+    // Enable Timer0 compare interrupt
+    TIMSK0 |= (1 << OCIE0A);
+}
+```
+
+Explanation:
+
+- `TCCR0A = 0;` and `TCCR0B = 0;`: Clear the Timer/Counter Control Registers `A` and `B` to ensure no residual settings affect the timer configuration.
+- `TCNT0 = 0;`: Initialize the Timer/Counter Register to `0` to start counting from zero.
+- `OCR0A = 124;`: Set the Output Compare Register `A` to `124`. This value is calculated to achieve a 2kHz frequency.
+- `TCCR0A |= (1 << WGM01);`: Set the Waveform Generation Mode bit (`WGM01`) to enable Clear Timer on Compare Match (`CTC`) mode. The `|=` operation ensures that only the specified bit is set, without altering other bits.
+- `TCCR0B |= (1 << CS01) | (1 << CS00);`: Set the Clock Select bits (`CS01` and `CS00`) to configure a prescaler of `64`. The `|=` operation is used to set both bits while preserving other settings.
+- `TIMSK0 |= (1 << OCIE0A);`: Enable the Output Compare Match `A` interrupt by setting the `OCIE0A` bit in the Timer/Counter Interrupt Mask Register. The `|=` operation ensures only this bit is set.
+  
+##### Start Timer0
+
+```c
+void startTimer0(void)
+{
+    TCNT0 = 0; // Reset Timer0 counter
+    sei();     // Enable global interrupts
+}
+```
+
+Explanation:
+
+- `TCNT0 = 0;`: Reset the Timer0 counter to `0`.
+- `sei();`: Enable global interrupts using the sei (Set Interrupt Enable) function.
+  
+##### Stop Timer0
+
+```c
+void stopTimer0(void)
+{
+    TIMSK0 &= ~(1 << OCIE0A); // Disable Timer0 compare interrupt
+}
+```
+
+Explanation:
+
+- `TIMSK0 &= ~(1 << OCIE0A);`: Disable the Timer0 compare interrupt by clearing the `OCIE0A` bit. The `&=` operation with the complement (`~`) ensures that only the specified bit is cleared.
+  
+##### Explanation of Bitwise Operations
+
+- Bitwise `OR` (`|`): Used to set specific bits to `1`. For example, `TCCR0A |= (1 << WGM01);` sets the `WGM01` bit in the `TCCR0A` register to `1`, enabling `CTC` mode.
+- Bitwise `AND` (`&`): Used to clear specific bits to `0` when combined with the complement (`~`). For example, `TIMSK0 &= ~(1 << OCIE0A);` clears the `OCIE0A` bit, disabling the Timer0 compare interrupt.
+- Bitwise `XOR` (`^`): Typically used to toggle specific bits, although not used in the provided code snippet.
+- Bitwise `NOR` (`~`): Used to invert bits. For example, `~(1 << OCIE0A)` inverts the bit pattern, ensuring only the `OCIE0A` bit is cleared when combined with the `AND` operation.
+  
+These operations allow precise control over the microcontroller's hardware registers, enabling efficient and direct manipulation of the timer configurations.
 
 [Back to top *Libraries*](#libraries)
 <hr>

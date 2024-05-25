@@ -137,7 +137,8 @@
 			"vect"
 		],
 		"files.associations": {
-			"interrupt.h": "c"
+			"interrupt.h": "c",
+			"delay.h": "c"
 		}
 	}
 }

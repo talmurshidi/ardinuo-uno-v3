@@ -1,22 +1,7 @@
 #include "led.h"
+#include <avr/io.h>
+#define __DELAY_BACKWARD_COMPATIBLE__
 #include <util/delay.h>
-
-// Simple delay function
-void delay_ms(uint16_t ms)
-{
-    for (uint16_t i = 0; i < ms; i++)
-    {
-        _delay_ms(1);
-    }
-}
-
-void delay_us(uint16_t ms)
-{
-    for (uint16_t i = 0; i < ms; i++)
-    {
-        _delay_us(1);
-    }
-}
 
 // Calculate the actual LED pin number
 int calcLedNumber(int ledNumber)
@@ -136,9 +121,9 @@ void dimLed(int ledNumber, int percentage, int duration)
     for (long i = 0; i < numCycles; i++)
     {
         lightUpOneLed(ledNumber);   // Turn LED on
-        delay_us(delayOn);          // Delay for 'on' period
+        _delay_us(delayOn);          // Delay for 'on' period
         lightDownOneLed(ledNumber); // Turn LED off
-        delay_us(delayOff);         // Delay for 'off' period
+        _delay_us(delayOff);         // Delay for 'off' period
     }
 }
 
