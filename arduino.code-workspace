@@ -126,6 +126,8 @@
 			"Referance",
 			"RXEN",
 			"setbaud",
+			"struct",
+			"structs",
 			"TCCR",
 			"TCNT",
 			"TIMSK",
