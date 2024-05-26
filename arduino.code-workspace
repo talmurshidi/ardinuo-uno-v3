@@ -60,6 +60,10 @@
 		{
 			"name": "W4-Project-Lunar-Lander",
 			"path": "Week4/W4-Project-Lunar-Lander"
+		},
+		{
+			"name": "W5-Project-Metronome",
+			"path": "Week5/W5-Project-Metronome"
 		}
 	],
 	"settings": {
