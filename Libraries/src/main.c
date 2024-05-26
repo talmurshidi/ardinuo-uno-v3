@@ -243,27 +243,48 @@
 //   return 0;
 // }
 
-#include "buzzer.h"
-#include <util/delay.h>
-#include <stdio.h>
-#include "usart.h"
+// #include "buzzer.h"
+// #include <util/delay.h>
+// #include <stdio.h>
+// #include "usart.h"
 
-// Main function
+// // Main function
+// int main(void)
+// {
+//   // Initialize USART for debugging
+//   initUSART();
+//   printf("USART Initialized\n");
+
+//   // Define an array of frequencies for the notes
+//   float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};
+
+//   // Play a series of tones
+//   for (int note = 0; note < 8; note++)
+//   {
+//     playTone(frequencies[note], 150); // Play each note for 150ms
+//     _delay_ms(300);                   // Wait for 300ms to ensure the previous tone completes
+//   }
+
+//   return 0;
+// }
+
+#include "display.h"
+#include <util/delay.h>
+
 int main(void)
 {
-  // Initialize USART for debugging
-  initUSART();
-  printf("USART Initialized\n");
+  initDisplay();
 
-  // Define an array of frequencies for the notes
-  float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};
-
-  // Play a series of tones
-  for (int note = 0; note < 8; note++)
+  while (1)
   {
-    playTone(frequencies[note], 150); // Play each note for 150ms
-    _delay_ms(300);                   // Wait for 300ms to ensure the previous tone completes
+    writeStringAndWait("Test", 1000);
+    writeStringAndWait("ABCD", 5000);
+    writeStringAndWait("EFGH", 5000);
+    writeStringAndWait("IJKL", 5000);
+    writeStringAndWait("MNOP", 5000);
+    writeStringAndWait("QRST", 5000);
+    writeStringAndWait("UVWX", 5000);
+    writeStringAndWait("YZ", 5000);
   }
-
   return 0;
 }

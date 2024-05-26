@@ -1,5 +1,5 @@
 #include "display.h"
-
+#include <string.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -10,11 +10,27 @@ const uint8_t SEGMENT_MAP[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99,
 /* Byte maps to select digit 1 to 4 */
 const uint8_t SEGMENT_SELECT[] = {0xF1, 0xF2, 0xF4, 0xF8};
 
+/* Segment byte maps for letters A to Z */
+const uint8_t ALPHABET_MAP[] = {0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E, 0xC2,
+                                0x89, 0xCF, 0xE1, 0x8A, 0xC7, 0xEA, 0xC8,
+                                0xC0, 0x8C, 0x4A, 0xCC, 0x92, 0x87, 0xC1,
+                                0xC1, 0xD5, 0x89, 0x91, 0xA4};
+
+#define SPACE 0xFF
+
+uint8_t segments[SEGMENT_COUNT];
+int char_position = 0;
+
 void initDisplay()
 {
   sbi(DDRD, LATCH_DIO);
   sbi(DDRD, CLK_DIO);
   sbi(DDRB, DATA_DIO);
+
+  for (int i = 0; i < SEGMENT_COUNT; i++)
+  {
+    segments[i] = SPACE;
+  }
 }
 
 // loop through seven segments of LED display and shift the correct bits in the
@@ -114,4 +130,61 @@ void blankSegment(uint8_t segment)
   shift(0xFF, MSBFIRST);
   shift(SEGMENT_SELECT[segment], MSBFIRST);
   sbi(PORTD, LATCH_DIO);
+}
+
+void writeCharToSegment(uint8_t segment, char character)
+{
+  uint8_t value;
+  if (character >= 'a' && character <= 'z')
+  {
+    character -= 32; // Convert to uppercase
+  }
+
+  if (character < 'A' || character > 'Z')
+  {
+    value = SPACE; // Use SPACE for unsupported characters
+  }
+  else
+  {
+    value = ALPHABET_MAP[character - 'A'];
+  }
+
+  cbi(PORTD, LATCH_DIO);
+  shift(value, MSBFIRST);
+  shift(SEGMENT_SELECT[segment], MSBFIRST);
+  sbi(PORTD, LATCH_DIO);
+}
+
+void writeString(char *str)
+{
+  for (int i = 0; i < 4; i++)
+  {
+    if (str[i] == '\0')
+    {
+      blankSegment(i); // Blank if string is shorter than 4 characters
+    }
+    else
+    {
+      writeCharToSegment(i, str[i]);
+    }
+  }
+}
+
+void writeStringAndWait(char *str, int delay)
+{
+  for (int i = 0; i < delay / 20; i++)
+  {
+    for (int j = 0; j < 4; j++)
+    {
+      if (str[j] == '\0')
+      {
+        blankSegment(j); // Blank if string is shorter than 4 characters
+      }
+      else
+      {
+        writeCharToSegment(j, str[j]);
+      }
+      _delay_ms(5);
+    }
+  }
 }
