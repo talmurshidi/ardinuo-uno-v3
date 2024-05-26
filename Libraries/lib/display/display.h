@@ -27,5 +27,8 @@ void blankSegment(uint8_t segment);
 void writeCharToSegment(uint8_t segment, char character);
 void writeString(char *str);
 void writeStringAndWait(char *str, int delay);
+void writeDotAndWait(uint8_t segment, int delay);
+void writeDotsAndWait(int delay);
+void updateSegment(uint8_t segment, uint8_t value);
 
 #endif // DISPLAY_H

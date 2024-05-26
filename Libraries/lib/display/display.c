@@ -1,6 +1,7 @@
 #include "display.h"
 #include <string.h>
 #include <avr/io.h>
+#define __DELAY_BACKWARD_COMPATIBLE__
 #include <util/delay.h>
 
 /* Segment byte maps for numbers 0 to 9 */
@@ -66,10 +67,7 @@ void writeNumberToSegment(uint8_t segment, uint8_t value)
 {
   if (value > 9)
     return; // Safety check
-  cbi(PORTD, LATCH_DIO);
-  shift(SEGMENT_MAP[value], MSBFIRST);
-  shift(SEGMENT_SELECT[segment], MSBFIRST);
-  sbi(PORTD, LATCH_DIO);
+  updateSegment(SEGMENT_SELECT[segment], SEGMENT_MAP[value]);
 }
 
 // Writes a number between 0 and 9999 to the display. To be used in a loop...
@@ -123,13 +121,18 @@ void writeNumberAndWait(int number, int delay)
   }
 }
 
+void updateSegment(uint8_t segment, uint8_t value)
+{
+  cbi(PORTD, LATCH_DIO);
+  shift(value, MSBFIRST);
+  shift(segment, MSBFIRST);
+  sbi(PORTD, LATCH_DIO);
+}
+
 // Blanks a certain segment. Segment 0 is the leftmost.
 void blankSegment(uint8_t segment)
 {
-  cbi(PORTD, LATCH_DIO);
-  shift(0xFF, MSBFIRST);
-  shift(SEGMENT_SELECT[segment], MSBFIRST);
-  sbi(PORTD, LATCH_DIO);
+  updateSegment(SEGMENT_SELECT[segment], SPACE);
 }
 
 void writeCharToSegment(uint8_t segment, char character)
@@ -149,10 +152,7 @@ void writeCharToSegment(uint8_t segment, char character)
     value = ALPHABET_MAP[character - 'A'];
   }
 
-  cbi(PORTD, LATCH_DIO);
-  shift(value, MSBFIRST);
-  shift(SEGMENT_SELECT[segment], MSBFIRST);
-  sbi(PORTD, LATCH_DIO);
+  updateSegment(SEGMENT_SELECT[segment], value);
 }
 
 void writeString(char *str)
@@ -186,5 +186,25 @@ void writeStringAndWait(char *str, int delay)
       }
       _delay_ms(5);
     }
+  }
+}
+
+void writeDotAndWait(uint8_t segment, int delay)
+{
+  if (segment > 4)
+    return;
+  // 0x7F Dot pattern, all segments off except the dot
+  updateSegment(SEGMENT_SELECT[segment], 0x7F);
+  _delay_ms(delay);
+}
+
+void writeDotsAndWait(int delay)
+{
+  for (int i = 0; i < delay * 4; i++)
+  {
+    writeDotAndWait(0, 0);
+    writeDotAndWait(1, 0);
+    writeDotAndWait(2, 0);
+    writeDotAndWait(3, 0);
   }
 }

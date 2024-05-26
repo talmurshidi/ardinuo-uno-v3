@@ -277,6 +277,11 @@ int main(void)
 
   while (1)
   {
+    writeDotAndWait(0, 2000);
+    writeDotAndWait(1, 2000);
+    writeDotAndWait(2, 2000);
+    writeDotAndWait(3, 2000);
+    writeDotsAndWait(2000);
     writeStringAndWait("Test", 1000);
     writeStringAndWait("ABCD", 5000);
     writeStringAndWait("EFGH", 5000);
