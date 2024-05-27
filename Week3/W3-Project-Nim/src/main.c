@@ -7,11 +7,25 @@
 #include "usart.h"
 #include "led.h"
 #include "random.h"
+#include "callback.h"
 
 #define START_NUMBER_MIN 21 // min number of matches
 #define START_NUMBER_MAX 99 // max number of matches
 #define MAX_NUMBER_MIN 3    // min selected matches
 #define MAX_NUMBER_MAX 9    // max selected matches
+
+// Declare functions
+void initHardware();
+void displayButtonOptions();
+void updateMoveDisplay(int move);
+void clearDisplay();
+void displayWinner(char turn);
+int confirmButtonPressed();
+void startGame(int *startNumber, int *maxNumber);
+int computerMove(int matches, int maxNumber);
+int playerMove(int maxNumber);
+void displayTurn(char player, int matches);
+void playGame(int startNumber, int maxNumber);
 
 void displayButtonOptions()
 {
@@ -23,6 +37,7 @@ void initHardware()
   initUSART();
   initDisplay();
   initButtons();
+  setButtonCallback(buttonCallback);
   initLeds();
   initRandom();
   seedRandom();
@@ -40,7 +55,7 @@ void clearDisplay()
   // Clear the display
   for (int i = 0; i < 4; i++)
   {
-    writeNumberToSegment(i, 0xFF);
+    blankSegment(i);
   }
 }
 
@@ -62,18 +77,6 @@ void displayWinner(char turn)
 int confirmButtonPressed()
 {
   return buttonPushed(2);
-}
-
-// Checks if the up button (Button 3) is pressed
-int upButtonPressed()
-{
-  return buttonPushed(3);
-}
-
-// Checks if the down button (Button 1) is pressed
-int downButtonPressed()
-{
-  return buttonPushed(1);
 }
 
 void startGame(int *startNumber, int *maxNumber)
@@ -103,13 +106,18 @@ int playerMove(int maxNumber)
 
   while (!confirmButtonPressed())
   {
-    if (upButtonPressed() && move < maxNumber)
+    int option = waitForButtonPress();
+
+    // Checks if the up button (Button 3) is pressed
+    if (option == 3 && move < maxNumber)
     {
       move++;
       updateMoveDisplay(move);
       printf("Player increases move to %d.\n", move);
     }
-    else if (downButtonPressed() && move > 1)
+
+    // Checks if the down button (Button 1) is pressed
+    if (option == 1 && move > 1)
     {
       move--;
       updateMoveDisplay(move);
