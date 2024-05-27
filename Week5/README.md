@@ -2,7 +2,7 @@
 
 ## Description
 
-This project transforms an Arduino board and shield into a metronome, which is an essential tool for musicians to practice timing. The metronome provides a short sound or light flash (or both) at a predefined frequency. The flash, sound, and frequency can be configured at startup, and the behavior can be modified during operation using buttons. The speed is displayed on a 7-segment display.
+This project transforms an Arduino board and shield into a metronome, which is an essential tool for musicians to practice timing. The [metronome](https://www.youtube.com/watch?v=n3QfM7LdmAo&ab_channel=LearnPianowithJazerLee) provides a short sound or light flash (or both) at a predefined frequency. The flash, sound, and frequency can be configured at startup, and the behavior can be modified during operation using buttons. The speed is displayed on a 7-segment display.
 
 ## Operation
 
