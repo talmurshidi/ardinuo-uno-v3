@@ -591,12 +591,12 @@ This project provides a buzzer library for the Arduino UNO V3 with ATmega328P. T
 
 #### Functionality
 
-The library provides functions to enable and disable the buzzer, play tones at specified frequencies and durations, and handle timer overflow interrupts for precise tone timing.
+The library provides functions to enable and disable the buzzer, play tones at specified frequencies and durations.
 
 - **enableBuzzer()**: Enables the buzzer by setting the appropriate pin as output.
 - **disableBuzzer()**: Disables the buzzer by setting the appropriate pin high.
 - **playTone(float frequency, uint32_t duration)**: Plays a tone with the specified frequency and duration.
-- **buzzerCallback()**: Callback function called by the Timer2 overflow interrupt to manage tone playback.
+- **buzzerCallback()**: Callback function called by the Timer2 interrupt to manage tone playback.
 
 #### How to Use
 

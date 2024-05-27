@@ -54,6 +54,7 @@ void updateTempoName(char *name, uint8_t bpm);
 void playBeat();
 void updateDisplayLoop(uint8_t bpm);
 void handleButtons();
+void handleDoubleButtonPress();
 
 // Initialize all components
 void initMetronome()
@@ -77,7 +78,7 @@ void timerCallback()
   }
 }
 
-// Main loop to handle button presses and display updates
+// handle button presses and display updates
 void handleButtons()
 {
   if (buttonPushed(1))
@@ -222,7 +223,7 @@ void logStatistics()
     stats[stats_index].mode = mode;
     strcpy(stats[stats_index].tempo_name, tempo_name);
     stats_index++;
-    printf("%ds %d bpm %s %s\n", elapsed_time, tempo, mode == 0 ? "buzzer" : (mode == 1 ? "leds" : "buzzer & leds"), tempo_name);
+    printf("%lds %d bpm %s %s\n", elapsed_time, tempo, mode == 0 ? "buzzer" : (mode == 1 ? "leds" : "buzzer & leds"), tempo_name);
   }
 }
 
@@ -230,10 +231,10 @@ int main()
 {
   initMetronome();
   setTimer1Callback(timerCallback);
+  setButtonCallback(handleButtons);
   startMetronome();
   while (1)
   {
-    handleButtons();
     if (!is_paused)
     {
       updateDisplayLoop(tempo);

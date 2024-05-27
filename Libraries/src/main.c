@@ -36,10 +36,6 @@
 //   // Frequencies of the notes (do-re-mi...)
 //   float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};
 
-//   // Initialize and enable the buzzer
-//   initBuzzer();
-//   enableBuzzer();
-
 //   for (int note = 0; note < 8; note++)
 //   {
 //     playTone(frequencies[note], DURATION);
@@ -244,6 +240,8 @@
 // }
 
 // #include "buzzer.h"
+// #include "timer.h"
+// #include "callback.h"
 // #include <util/delay.h>
 // #include <stdio.h>
 // #include "usart.h"
@@ -254,6 +252,9 @@
 //   // Initialize USART for debugging
 //   initUSART();
 //   printf("USART Initialized\n");
+//   initTimer2();
+//   startTimer2();
+//   setTimer2Callback(buzzerCallback);
 
 //   // Define an array of frequencies for the notes
 //   float frequencies[] = {C5, D5, E5, F5, G5, A5, B5, C6};

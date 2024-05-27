@@ -22,8 +22,11 @@ void setup()
   initUSART();
   initTimer1();
   startTimer1();
+  initTimer2();
+  startTimer2();
   setButtonCallback(gameButtonCallback);
   setTimer1Callback(updateFlageCallback);
+  setTimer2Callback(buzzerCallback);
 
   // Enable global interrupts
   sei();
