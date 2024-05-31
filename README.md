@@ -695,7 +695,7 @@ int main(void)
 <hr>
 <br>
 
-### Arduino UNO Potentiometer Library
+### [Arduino UNO Potentiometer Library](./Libraries/lib/potentiometer)
 
 #### Summary
 
