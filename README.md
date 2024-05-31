@@ -695,6 +695,79 @@ int main(void)
 <hr>
 <br>
 
+### Arduino UNO Potentiometer Library
+
+#### Summary
+
+This library provides functions to initialize and read the value of a potentiometer connected to the Arduino UNO V3 with the Arduino Multi-function Shield Expansion Board. It uses the Analog-to-Digital Converter (ADC) of the ATmega328P microcontroller to read the analog value from the potentiometer.
+
+#### Benefits
+
+- **Ease of Use**: Simplifies the process of reading analog values from a potentiometer.
+- **Modular Design**: Easily integrates with other libraries and projects.
+- **Educational**: Helps in understanding ADC usage in embedded systems.
+
+#### Functionality
+
+The library provides functions to initialize the ADC and read the raw ADC value from the potentiometer.
+
+- **initPotentiometer()**: Initializes the ADC for the potentiometer.
+- **readPotentiometer()**: Reads the raw ADC value from the potentiometer.
+
+##### How to Use
+
+##### API Reference
+
+###### Initialization
+
+- **void initPotentiometer(void)**:
+  - Initializes the ADC for use with the potentiometer.
+
+#### Reading ADC Value
+
+- **uint16_t readPotentiometer(void)**:
+  - Reads the raw ADC value from the potentiometer.
+  - Returns a 16-bit unsigned integer representing the ADC value.
+
+##### Example Code
+
+Here's a snippet from the `main.c` file demonstrating the potentiometer library usage:
+
+```c
+#include "potentiometer.h"
+#include <util/delay.h>
+#include <stdio.h>
+#include "usart.h"
+
+// Main function
+int main(void)
+{
+  // Initialize USART for debugging
+  initUSART();
+  printf("USART Initialized\n");
+
+  // Initialize the potentiometer
+  initPotentiometer();
+  printf("Potentiometer Initialized\n");
+
+  // Main loop
+  while (1)
+  {
+    // Read the ADC value from the potentiometer
+    uint16_t adcValue = readPotentiometer();
+    printf("ADC Value: %d\n", adcValue);
+
+    _delay_ms(1000);
+  }
+
+  return 0;
+}
+```
+
+[Back to top *Libraries*](#libraries)
+<hr>
+<br>
+
 </details>
 
 <details>
