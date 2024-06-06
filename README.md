@@ -913,6 +913,69 @@ This project implements a Morse code trainer using an Arduino. The trainer displ
 
 </summary>
 
+### [Scrolling Numbers](./Week3/W3-Scrolling-Numbers/)
+
+#### Summary
+
+This project is a simple exercise designed to demonstrate the usage of the display library in an embedded system. The program scrolls numbers from right to left on a 4-digit 7-segment display, continuously cycling through the digits 0 to 9.
+
+#### Benefits
+
+- **Learning Tool**: This project is an excellent way for beginners to practice using the display library and understand the basics of controlling 7-segment displays.
+- Concept Reinforcement: It reinforces the understanding of loops, modulo operations, and basic display operations in embedded programming.
+- **Practical Application**: The project shows how simple logic can create engaging visual effects, which can be extended to more complex projects.
+Functionality
+- **Initialization**: The USART and display are initialized to enable communication and display operations.
+- **Scrolling Mechanism**: Numbers scroll from right to left on the display, incrementing each digit by one every second.
+Looping: After displaying '7890', the program continues with '8901', '9012', and so on, endlessly looping through the digits 0 to 9.
+
+#### Explanation
+
+- **Main Loop**: The program enters an infinite loop where it:
+- - Iterates from 0 to 9.
+- - Computes the digits to display using the modulo operator to wrap around after reaching 9.
+- - Combines the digits into a 4-digit number.
+- - Displays the number on the 7-segment display for 500 milliseconds before moving to the next number.
+- **Endless Loop**: The process repeats endlessly, creating a scrolling effect.
+
+#### Challenges and Problems
+
+- Timing: Ensuring the display updates every second requires precise timing control.
+- Modulo Operation: Correctly using the modulo operator to wrap around the digits after reaching 9.
+- Display Synchronization: Keeping the display updated in sync with the scrolling logic.
+
+[Back to top *Week 3*](#week-3)
+<hr>
+<br>
+
+### [Nim Game Project](./Week3/W3-Project-Nim)
+
+#### Summary
+
+Nim is a classic two-player strategy game involving matches. The game starts with a set number of matches, and players take turns removing 1 to 3 matches. The player forced to take the last match loses. In this project, you play against the Arduino, with the game progress displayed on a 4-digit LED display. The game features include randomized start conditions, user input via buttons, and visual feedback using LEDs.
+
+#### Benefits
+
+- **Educational**: This project helps in understanding fundamental concepts of microcontroller programming, random number generation, and game logic.
+- **Engaging**: It offers an interactive way to learn and practice coding with real-time feedback.
+- **Extendable**: The code can be modified to add more features or change game rules, enhancing learning and creativity.
+  
+#### Functionality
+
+- **Game Initialization**: The game starts by generating a seed using a potentiometer, displaying it, and initializing the game with a random number of matches and a random maximum number of matches that can be taken per turn.
+- **Gameplay**:
+- - **Player's Turn**: Displayed with a 'P' on the second digit from the left. Players can use buttons to choose how many matches to take (1-3) and confirm their choice.
+- - **Computer's Turn**: Displayed with a 'C' on the second digit from the left. The computer uses a strategy to determine the number of matches to take.
+- **End Game**: The game ends when only one match is left, and the player who takes it loses. The winner is displayed on the LED display, and a celebratory LED dance sequence is shown.
+- **Statistics**: The game logs each move and the remaining matches, displaying the complete game log at the end.
+  
+#### Challenges and Problems
+
+- **Memory Management**: Proper allocation and deallocation of memory for logging game statistics are crucial to prevent memory leaks.
+- **Button Debouncing**: Ensuring reliable button presses requires implementing debouncing to avoid erroneous multiple inputs.
+- **Game Logic**: Implementing a fair and challenging computer strategy adds complexity to the game logic.
+- **Display Synchronization**: Keeping the 7-segment display and LED indicators in sync with game events requires careful timing and state management.
+
 [Back to top *Week 3*](#week-3)
 <hr>
 <br>
