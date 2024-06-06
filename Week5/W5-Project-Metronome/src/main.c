@@ -15,7 +15,7 @@
 #include <util/delay.h>
 
 #define TONE_DELAY_MS 50
-#define STATISTICS_LOG_SIZE 100
+#define STATISTICS_LOG_SIZE 50
 #define MIN_BPM 40
 #define MAX_BPM 255
 
@@ -342,8 +342,8 @@ void logStatistics()
     stats[stats_index].mode = mode;
     strncpy(stats[stats_index].tempoName, tempoName, sizeof(stats[stats_index].tempoName) - 1);
     stats[stats_index].tempoName[sizeof(stats[stats_index].tempoName) - 1] = '\0'; // Ensure null-termination
-    printOutput(elapsedTime, tempo, mode, tempoName);                              // Debug print to check values
-    printOutput(stats[stats_index].time, stats[stats_index].bpm, stats[stats_index].mode, stats[stats_index].tempoName);
+    // printOutput(elapsedTime, tempo, mode, tempoName);                              // Debug print to check values
+    // printOutput(stats[stats_index].time, stats[stats_index].bpm, stats[stats_index].mode, stats[stats_index].tempoName);
     stats_index++;
   }
 }
