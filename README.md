@@ -847,11 +847,64 @@ int main(){
 
 </summary>
 
-</details>
+### [Button Library](./Libraries/lib/button)
 
 [Back to top *Week 2*](#week-2)
 <hr>
 <br>
+
+### [Morse Trainer](./Week2/W2-Project-Morse-Trainer)
+
+#### Description
+
+This project implements a Morse code trainer using an Arduino. The trainer displays Morse code using LEDs and quizzes the user on their knowledge of Morse code by presenting multiple-choice questions. The user answers the questions using buttons connected to the Arduino.
+
+#### Features
+
+- **Countdown Timer**: A countdown pattern is shown with LEDs before the quiz starts.
+- **Morse Code Display**: The trainer displays Morse code for a randomly selected character using LEDs.
+- **Multiple Choice Quiz**: The user selects the correct letter from three options displayed on the serial monitor.
+- **Score Tracking**: The trainer tracks the user's score and displays the final score at the end of the quiz.
+- **Celebration Sequence**: If the user achieves a minimum score, the LEDs perform a celebratory dance.
+
+#### Usage
+
+1. **Start the Trainer**: When the Arduino starts, it displays a countdown using the LEDs.
+2. **Morse Code Quiz**: The trainer displays Morse code for a randomly selected character using LEDs. The user has to select the correct letter from three options displayed on the serial monitor.
+3. **Answering Questions**: Use the buttons to select the correct answer.
+   - Button 1: Select answer A
+   - Button 2: Select answer B
+   - Button 3: Select answer C
+4. **Scoring**: The trainer tracks the user's score and displays it on the serial monitor at the end of the quiz.
+5. **Celebration Sequence**: If the user scores above the minimum threshold, the LEDs perform a celebratory dance.
+
+#### Challenges and Problems
+
+- **Timing Precision**: Ensuring the LEDs flash at accurate intervals to correctly represent dots and dashes in Morse code.
+- **Debouncing**: Handling button presses accurately without unintended multiple detections.
+- **Memory Management**: Efficiently using memory to store Morse code sequences and user statistics.
+- **Randomization**: Generating random characters for the quiz without repetition or bias.
+- **User Feedback**: Providing clear and immediate feedback to help users learn effectively.
+
+#### Morse Code Chart
+
+| Character | Morse Code | Character | Morse Code | Character | Morse Code | Character | Morse Code |
+|-----------|------------|-----------|------------|-----------|------------|-----------|------------|
+| A         | ·-         | J         | ·---       | S         | ···        | 1         | ·----      |
+| B         | -···       | K         | -·-        | T         | -          | 2         | ··---      |
+| C         | -·-·       | L         | ·-··       | U         | ··-        | 3         | ···--      |
+| D         | -··        | M         | --         | V         | ···-       | 4         | ····-      |
+| E         | ·          | N         | -·         | W         | ·--        | 5         | ·····      |
+| F         | ··-·       | O         | ---        | X         | -··-       | 6         | -····      |
+| G         | --·        | P         | ·--·       | Y         | -·--       | 7         | --···      |
+| H         | ····       | Q         | --·-       | Z         | --··       | 8         | ---··      |
+| I         | ··         | R         | ·-·        | 0         | -----      | 9         | ----·      |
+
+[Back to top *Week 2*](#week-2)
+<hr>
+<br>
+
+</details>
 
 <details>
 <summary>

@@ -126,6 +126,7 @@
 			"Referance",
 			"RXEN",
 			"setbaud",
+			"sprintf",
 			"struct",
 			"structs",
 			"TCCR",
@@ -144,7 +145,8 @@
 		],
 		"files.associations": {
 			"interrupt.h": "c",
-			"delay.h": "c"
+			"delay.h": "c",
+			"time.h": "c"
 		}
 	}
 }

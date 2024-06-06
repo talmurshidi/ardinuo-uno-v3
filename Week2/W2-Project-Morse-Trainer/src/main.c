@@ -1,8 +1,10 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 #include <stdlib.h>
-#include <time.h>
 #include "led.h"
+#include "callback.h"
+#include "random.h"
 #include "button.h"
 #include "usart.h"
 
@@ -27,7 +29,10 @@ void initSystem()
 {
   initUSART();
   initButtons();
-  enableAllLeds();
+  initLeds();
+  initRandom();
+  seedRandom();
+  setButtonCallback(buttonCallback);
   sei(); // Enable global interrupts
 }
 
@@ -71,14 +76,13 @@ void displayMorseCode(const char *code)
 
 void performQuiz()
 {
-  srand((unsigned int)time(NULL)); // Seed the random number generator
   int score = 0;
   char input[100];
   int options[3]; // To hold indices of the options
 
   for (int i = 0; i < NUMBER_OF_ROUNDS; i++)
   {
-    int correctIndex = rand() % NUM_LETTERS; // Random index for the correct answer
+    int correctIndex = getRandomNumber() % NUM_LETTERS; // Random index for the correct answer
     options[0] = correctIndex;               // Set one option as the correct answer
 
     // Fill other options with random letters, ensuring no duplicates
