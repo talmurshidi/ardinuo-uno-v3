@@ -200,7 +200,7 @@ void writeDotAndWait(uint8_t segment, int delay)
 
 void writeDotsAndWait(int delay)
 {
-  for (int i = 0; i < delay * 4; i++)
+  for (int i = 0; i < delay * 3; i++)
   {
     writeDotAndWait(0, 0);
     writeDotAndWait(1, 0);
