@@ -50,18 +50,9 @@ When the pause button is pressed:
 
 ## Tempo Classification Table
 
-| Italian     | English              | Beats Per Minute (bpm) |
-|-------------|----------------------|------------------------|
-| Largo       | Broadly              | 40 – 60                |
-| Lento       | Slowly               | 52 – 68                |
-| Adagio      | Slow (“at ease”)     | 60 – 80                |
-| Andante     | Moderately slow      | 76 – 100               |
-| Moderato    | Moderately           | 88 – 112               |
-| Allegretto  | Somewhat fast        | 100 – 128              |
-| Allegro     | Fast (joyous)        | 112 – 160              |
-| Vivace      | Fast & lively        | ~ 140                  |
-| Presto      | Very fast            | 140 – 200              |
-| Prestissimo | Faster than Presto   | > 188                  |
+![Tempo Marking](https://violinspiration.com/wp-content/uploads/Tempo-Meaning-BPM.jpg)
+
+> Source: [What are the most common Italian Tempo Markings?](https://violinspiration.com/free-online-metronome/)
 
 ## Requirements
 
@@ -106,3 +97,9 @@ When the pause button is pressed:
 
 - Adjusts the frequency of the buzzer sound for a higher or lower pitch.
 - This feature allows users to customize the sound according to their preference.
+
+### Challenges and Problems
+
+- Memory Management: Allocating and freeing memory dynamically for the statistics array to prevent memory leaks.
+- Interrupt Handling: Managing button presses and timer interrupts effectively to ensure accurate timing and responsive controls.
+- Mode Switching: Implementing smooth transitions between different operational modes when buttons are pressed together.
