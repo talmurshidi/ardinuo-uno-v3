@@ -13,13 +13,20 @@ volatile uint8_t seconds = 0;
 volatile uint8_t minutes = 0;
 volatile uint8_t is_running = 0;
 
+// Declare functions
+void timerCallback();
+void handleButtons();
+
 void init()
 {
   initUSART();
   initDisplay();
   initTimer1();
+  startTimer1();
   initButtons();
   initLeds();
+  setTimer1Callback(timerCallback);
+  setButtonCallback(handleButtons);
   sei(); // Enable global interrupts
 }
 
@@ -47,7 +54,7 @@ void stopStopwatch()
   if (is_running)
   {
     is_running = 0;
-    stopTimer1();
+    // stopTimer1();
   }
 }
 
@@ -98,27 +105,31 @@ void timerCallback()
   tick(); // Update time every second
 }
 
+void handleButtons()
+{
+  buttonCallback();
+  if (buttonPushed(1))
+  { // Button S1
+    startStopwatch();
+  }
+  if (buttonPushed(2))
+  { // Button S2
+    stopStopwatch();
+  }
+  if (buttonPushed(3))
+  { // Button S3
+    resetStopwatch();
+  }
+}
+
 int main()
 {
   init();
-  setTimer1Callback(timerCallback);
 
   printf("Start the stopwatch by pressing button S1, stop by pressing button S2, and reset with S3\n");
 
   while (1)
   {
-    if (buttonPushed(1))
-    { // Button S1
-      startStopwatch();
-    }
-    if (buttonPushed(2))
-    { // Button S2
-      stopStopwatch();
-    }
-    if (buttonPushed(3))
-    { // Button S3
-      resetStopwatch();
-    }
     if (is_running)
     {
       updateDisplayLoop(minutes, seconds);
