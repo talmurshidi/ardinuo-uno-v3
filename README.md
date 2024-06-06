@@ -777,6 +777,67 @@ int main(void)
 
 </summary>
 
+### [LED Dimming and Fading](./Week1/W1-Dimmed-LEDS)
+
+#### Description
+
+This project demonstrates how to implement LED dimming and fading using Pulse Width Modulation (PWM) on an Arduino. By quickly switching LEDs on and off at varying intervals, we can create the illusion of dimming. This project includes functions to dim an LED to a specific brightness percentage and to gradually fade an LED in and out over a specified duration.
+
+#### Functions
+
+##### `dimLed(int ledNumber, int percentage, int duration)`
+
+Dims the specified LED to a given brightness percentage for a specified duration.
+
+- `ledNumber`: The number of the LED to dim.
+- `percentage`: The brightness level (0-100%).
+- `duration`: The duration over which the LED should be dimmed (in milliseconds).
+
+##### `fadeInLed(int led, int duration)`
+
+Gradually fades in the specified LED from 0% to 100% brightness over a given duration.
+
+- `led`: The number of the LED to fade in.
+- `duration`: The duration over which the LED should fade in (in milliseconds).
+
+##### `fadeOutLed(int led, int duration)`
+
+Gradually fades out the specified LED from 100% to 0% brightness over a given duration.
+
+- `led`: The number of the LED to fade out.
+- `duration`: The duration over which the LED should fade out (in milliseconds).
+
+#### Example Program
+
+```c
+#include <util/delay.h>
+#include <led.h>
+
+int main(){
+  initLeds();
+
+  while (1)
+  {
+    dimLed(0, 50, 800); // Dim LED 0 to 50% brightness for 800 ms
+    _delay_ms(400);     // Wait for 400 ms
+    fadeInLed(1, 800);  // Fade in LED 1 over 800 ms
+    _delay_ms(400);     // Wait for 400 ms
+    fadeOutLed(2, 800); // Fade out LED 2 over 800 ms
+    _delay_ms(400);     // Wait for 400 ms
+  }
+}
+```
+
+[Back to top *Week 1*](#week-1)
+<hr>
+<br>
+
+### [LED Library](./Libraries/lib/led)
+
+[Back to top *Week 1*](#week-1)
+<hr>
+<br>
+
 </details>
 
 <details>
@@ -788,12 +849,20 @@ int main(void)
 
 </details>
 
+[Back to top *Week 2*](#week-2)
+<hr>
+<br>
+
 <details>
 <summary>
 
 ## Week 3
 
 </summary>
+
+[Back to top *Week 3*](#week-3)
+<hr>
+<br>
 
 </details>
 

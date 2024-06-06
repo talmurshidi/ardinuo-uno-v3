@@ -1,17 +1,16 @@
-#include <stdio.h>
 #include <util/delay.h>
-#include <usart.h>
-#include <LED.h>
+#include <led.h>
 
 int main(){
-  enableAllLed();
-  lightUpload(0);
+  initLeds();
 
   while (1)
   {
-    lightUpload(3);
-    _delay_us(50);
-    lightDownLed(3);
-    _delay_us(950);
+    dimLed(0,50,800);
+    _delay_ms(400);
+    fadeInLed(1,800);
+    _delay_ms(400);
+    fadeOutLed(2,800);
+    _delay_ms(400);
   }
 }
