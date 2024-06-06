@@ -768,7 +768,7 @@ int main(void)
 <hr>
 <br>
 
-### Arduino Seven Segment Display Library
+### [Arduino Seven Segment Display Library](./Libraries/lib/display)
 
 #### Summary
 
@@ -803,6 +803,12 @@ This library provides an interface to control a seven-segment display using a sh
 
 - **`void shift(uint8_t val, uint8_t bitorder)`**: Shifts data to the shift register.
 - **`void updateSegment(uint8_t segment, uint8_t value)`**: Updates a specified segment with a value.
+
+#### Register Configurations and Settings
+
+- `LATCH_DIO, CLK_DIO, DATA_DIO`: Define the shift register pins used for the seven-segment display.
+- `sbi(register, bit)`: Sets a bit in a register.
+- `cbi(register, bit)`: Clears a bit in a register.
 
 #### How to Use
 
@@ -846,12 +852,6 @@ int main(void)
     return 0;
 }
 ```
-
-#### Register Configurations and Settings
-
-- `LATCH_DIO, CLK_DIO, DATA_DIO`: Define the shift register pins used for the seven-segment display.
-- `sbi(register, bit)`: Sets a bit in a register.
-- `cbi(register, bit)`: Clears a bit in a register.
 
 [Back to top *Libraries*](#libraries)
 <hr>
