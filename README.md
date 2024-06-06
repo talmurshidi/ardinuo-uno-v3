@@ -768,6 +768,95 @@ int main(void)
 <hr>
 <br>
 
+### Arduino Seven Segment Display Library
+
+#### Summary
+
+This library provides an interface to control a seven-segment display using a shift register on the Arduino UNO V3 with the Arduino Multi-function Shield Expansion Board. It includes functions to display numbers, characters, and strings on the seven-segment display.
+
+#### Benefits
+
+- **Ease of Use**: Simplifies controlling a seven-segment display.
+- **Flexibility**: Supports displaying numbers, characters, and strings.
+- **Versatile**: Provides functions to display time, handle delays, and manipulate individual segments.
+
+#### Functionality
+
+##### Initialization
+
+- **`void initDisplay()`**: Initializes the display by setting up the necessary pins and clearing the segments.
+
+##### Display Numbers and Characters
+
+- **`void writeNumberToSegment(uint8_t segment, uint8_t value)`**: Writes a single digit to a specified segment.
+- **`void writeNumber(int number)`**: Writes a number (0-9999) to the display.
+- **`void writeNumberAndWait(int number, int delay)`**: Writes a number to the display and holds it for the specified delay.
+- **`void writeTimeAndWait(uint8_t minutes, uint8_t seconds, int delay)`**: Displays time (minutes and seconds) on the display for the specified delay.
+- **`void blankSegment(uint8_t segment)`**: Blanks a specified segment.
+- **`void writeCharToSegment(uint8_t segment, char character)`**: Writes a character to a specified segment.
+- **`void writeString(char *str)`**: Writes a string to the display.
+- **`void writeStringAndWait(char *str, int delay)`**: Writes a string to the display and holds it for the specified delay.
+- **`void writeDotAndWait(uint8_t segment, int delay)`**: Writes a dot to a specified segment and holds it for the specified delay.
+- **`void writeDotsAndWait(int delay)`**: Writes dots to all segments and holds them for the specified delay.
+
+##### Internal Functions
+
+- **`void shift(uint8_t val, uint8_t bitorder)`**: Shifts data to the shift register.
+- **`void updateSegment(uint8_t segment, uint8_t value)`**: Updates a specified segment with a value.
+
+#### How to Use
+
+##### Example Code
+
+Here's an example to test the functionality of the display library:
+
+```c
+#include "display.h"
+#include <util/delay.h>
+#include <stdio.h>
+
+// Main function
+int main(void)
+{
+    // Initialize the display
+    initDisplay();
+    printf("Display Initialized\n");
+
+    // Display a number
+    writeNumber(1234);
+    _delay_ms(1000);
+
+    // Display a character
+    writeCharToSegment(0, 'A');
+    _delay_ms(1000);
+
+    // Display a string
+    writeString("HELP");
+    _delay_ms(1000);
+
+    // Display time (12:34)
+    writeTimeAndWait(12, 34, 2000);
+
+    // Main loop
+    while (1)
+    {
+        // Add your main code here
+    }
+
+    return 0;
+}
+```
+
+#### Register Configurations and Settings
+
+- `LATCH_DIO, CLK_DIO, DATA_DIO`: Define the shift register pins used for the seven-segment display.
+- `sbi(register, bit)`: Sets a bit in a register.
+- `cbi(register, bit)`: Clears a bit in a register.
+
+[Back to top *Libraries*](#libraries)
+<hr>
+<br>
+
 </details>
 
 <details>
