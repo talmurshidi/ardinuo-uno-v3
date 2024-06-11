@@ -269,57 +269,59 @@
 //   return 0;
 // }
 
-// #include "display.h"
-// #include <util/delay.h>
-
-// int main(void)
-// {
-//   initDisplay();
-
-//   while (1)
-//   {
-//     writeDotAndWait(0, 2000);
-//     writeDotAndWait(1, 2000);
-//     writeDotAndWait(2, 2000);
-//     writeDotAndWait(3, 2000);
-//     writeDotsAndWait(2000);
-//     writeStringAndWait("Test", 1000);
-//     writeStringAndWait("ABCD", 5000);
-//     writeStringAndWait("EFGH", 5000);
-//     writeStringAndWait("IJKL", 5000);
-//     writeStringAndWait("MNOP", 5000);
-//     writeStringAndWait("QRST", 5000);
-//     writeStringAndWait("UVWX", 5000);
-//     writeStringAndWait("YZ", 5000);
-//   }
-//   return 0;
-// }
-
-#include "potentiometer.h"
+#include "display.h"
 #include <util/delay.h>
-#include <stdio.h>
-#include "usart.h"
 
-// Main function
 int main(void)
 {
-  // Initialize USART for debugging
-  initUSART();
-  printf("USART Initialized\n");
+  initDisplay();
 
-  // Initialize the potentiometer
-  initPotentiometer();
-  printf("Potentiometer Initialized\n");
-
-  // Main loop
   while (1)
   {
-    // Read the ADC value from the potentiometer
-    uint16_t adcValue = readPotentiometer();
-    printf("ADC Value: %d\n", adcValue);
-
-    _delay_ms(1000);
+    // writeDotAndWait(0, 2000);
+    // writeDotAndWait(1, 2000);
+    // writeDotAndWait(2, 2000);
+    // writeDotAndWait(3, 2000);
+    // writeDotsAndWait(2000);
+    // writeStringAndWait("Test", 1000);
+    // writeStringAndWait("p", 100);
+    writeStringContainsNumber("p9");
+    // writeNumber(9);
+    // writeStringAndWait("EFGH", 5000);
+    // writeStringAndWait("IJKL", 5000);
+    // writeStringAndWait("MNOP", 5000);
+    // writeStringAndWait("QRST", 5000);
+    // writeStringAndWait("UVWX", 5000);
+    // writeStringAndWait("YZ", 5000);
   }
-
   return 0;
 }
+
+// #include "potentiometer.h"
+// #include <util/delay.h>
+// #include <stdio.h>
+// #include "usart.h"
+
+// // Main function
+// int main(void)
+// {
+//   // Initialize USART for debugging
+//   initUSART();
+//   printf("USART Initialized\n");
+
+//   // Initialize the potentiometer
+//   initPotentiometer();
+//   printf("Potentiometer Initialized\n");
+
+//   // Main loop
+//   while (1)
+//   {
+//     // Read the ADC value from the potentiometer
+//     uint16_t adcValue = readPotentiometer();
+//     printf("ADC Value: %d\n", adcValue);
+
+//     _delay_ms(1000);
+//   }
+
+//   return 0;
+// }

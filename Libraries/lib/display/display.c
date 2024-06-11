@@ -208,3 +208,31 @@ void writeDotsAndWait(int delay)
     writeDotAndWait(3, 0);
   }
 }
+
+// Writes a character or number to a certain segment. Segment 0 is the leftmost.
+void writeCharOrNumber(uint8_t segment, char character)
+{
+  if (character >= '0' && character <= '9')
+  {
+    writeNumberToSegment(segment, character - '0');
+  }
+  else
+  {
+    writeCharToSegment(segment, character);
+  }
+}
+
+void writeStringContainsNumber(char *str)
+{
+  for (int i = 0; i < 4; i++)
+  {
+    if (str[i] == '\0')
+    {
+      blankSegment(i); // Blank if string is shorter than 4 characters
+    }
+    else
+    {
+      writeCharOrNumber(i, str[i]);
+    }
+  }
+}

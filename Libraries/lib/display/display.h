@@ -30,5 +30,7 @@ void writeStringAndWait(char *str, int delay);
 void writeDotAndWait(uint8_t segment, int delay);
 void writeDotsAndWait(int delay);
 void updateSegment(uint8_t segment, uint8_t value);
+void writeCharOrNumber(uint8_t segment, char character);
+void writeStringContainsNumber(char *str);
 
 #endif // DISPLAY_H
