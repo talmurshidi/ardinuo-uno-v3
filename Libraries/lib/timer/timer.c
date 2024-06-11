@@ -26,6 +26,7 @@ void initTimer0(void)
 void startTimer0(void)
 {
     TCNT0 = 0; // Reset Timer0 counter
+    TIMSK0 |= (1 << OCIE0A); // Re-enable Timer0 compare interrupt
     sei();     // Enable global interrupts
 }
 
@@ -59,6 +60,7 @@ void initTimer1(void)
 void startTimer1(void)
 {
     TCNT1 = 0; // Reset Timer1 counter
+    TIMSK1 |= (1 << OCIE1A); // Re-enable Timer1 compare interrupt
     sei();     // Enable global interrupts
 }
 
@@ -92,6 +94,7 @@ void initTimer2(void)
 void startTimer2(void)
 {
     TCNT2 = 0; // Reset Timer2 counter
+    TIMSK2 |= (1 << OCIE2A); // Re-enable Timer2 compare interrupt
     sei();     // Enable global interrupts
 }
 
